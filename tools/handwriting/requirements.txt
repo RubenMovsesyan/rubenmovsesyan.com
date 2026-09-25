@@ -1,0 +1,10 @@
+# Pipeline deps for the handwriting font build.
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+numpy
+scipy
+Pillow
+potracer            # pure-python potrace; no system package needed
+fonttools
+brotli              # required for woff2 output
+opentype-sanitizer  # the validator browsers use; catches silent-fallback bugs
+matplotlib

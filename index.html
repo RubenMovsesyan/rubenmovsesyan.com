@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astronomical Observations</title>
+  <meta name="description" content="Mapping the orbit of the Earth, the way Kepler did — field notes from the eyepiece.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&amp;family=Kalam:wght@300;400;700&amp;display=swap">
+
+  <link data-trunk rel="css" href="assets/css/base.css">
+  <link data-trunk rel="css" href="assets/css/notebook.css">
+  <link data-trunk rel="copy-file" href="assets/telescope.svg">
+  <!-- Handwriting font test scaffolding; see /hand-preview.html. Remove both
+       lines once the font question is settled. -->
+  <link data-trunk rel="copy-file" href="assets/hand-preview.html">
+  <link data-trunk rel="copy-dir" href="assets/fonts">
+  <link data-trunk rel="rust" data-wasm-opt="z">
+</head>
+<body>
+
+  <!-- Temporary: switch the body text between Kalam and the scanned hand.
+       Remove with the rest of the font-test scaffolding. -->
+  <input type="checkbox" id="hw-toggle" class="hw-toggle" checked>
+  <label for="hw-toggle" class="hw-label"></label>
+
+  <!-- ─── The sky we are observing from ───────────────────────────────── -->
+  <div class="sky-stage">
+    <section class="hero">
+      <!-- Animated starfield, rendered by src/starfield.rs. -->
+      <canvas class="sky" data-orrery="starfield" aria-hidden="true"></canvas>
+
+      <div class="hero-plate">
+        <h1 class="hero-title">Astronomical Observations</h1>
+        <p class="hero-sub">Field Notes from the Eyepiece</p>
+      </div>
+
+      <div class="hero-fade" aria-hidden="true"></div>
+    </section>
+
+    <!-- Sits above the sky, below the notebook: the lower third is covered
+         by the parchment, which is what puts it "behind the page". -->
+    <img class="telescope" src="telescope.svg" alt="" aria-hidden="true">
+  </div>
+
+  <!-- ─── The notebook ────────────────────────────────────────────────── -->
+  <main class="notebook">
+    <div class="notebook-edge" aria-hidden="true">
+      <svg viewBox="0 0 100 10" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="parchment-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#b8954a"/>
+            <stop offset="100%" stop-color="#d4b87a"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 0 L2 3 L5 1 L9 4 L14 1.5 L18 4 L23 2 L28 5 L33 1 L38 3.5 L42 1 L47 4
+                 L52 2 L57 5 L61 1.5 L66 4 L70 2 L75 5 L79 1 L84 3.5 L88 2 L93 4 L97 1.5
+                 L100 3 L100 10 L0 10 Z" fill="url(#parchment-top)"/>
+      </svg>
+    </div>
+
+    <!-- Shared <defs> for every sketch on the page. Keeping the filter in one
+         place avoids duplicate ids once there is more than one drawing. -->
+    <svg class="sketch-defs" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- Pushes strokes around by a little noise, so ruled geometry comes
+             out looking drawn by hand. -->
+        <filter id="ink" x="-15%" y="-15%" width="130%" height="130%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.028"
+                        numOctaves="3" seed="11" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4"
+                             xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="page">
+      <p class="page-meta">Observationes Astronomicae &middot; Anno Domini MDCXI</p>
+
+      <article class="entry">
+        <div class="entry-date"><span>Entry I</span><span>2026</span></div>
+
+        <h2 class="entry-title">Kepler's Mapping of Earth's Orbit</h2>
+
+        <div class="prose">
+
+          <p>
+            It is tempting to look at the Martian data to try to track and map the orbit of Mars. This falls apart fast. We're trying to track a moving object while we're standing on a moving object ourselves. Your gut might tell you that this is impossible. But, both planets are doing the same cyclical motion over and over, so if you wait long enough, the sky repeats itself. The question now is given what we can observe, how can we use that to get the orbit of the big floating rock in space that we're standing on? The answer comes down to the synodic period of the Earth and Mars. What is the synodic period? This is the interval between two line-ups of the orbits of the Earth and Mars. We take a straight line from the Sun to the Earth and wait for Mars to intersect that line in opposition (going Sun, then Earth, then Mars). In practice, this looks like keeping track of when Mars is highest in the sky at midnight. Then we wait for that to happen again. The time it takes between those two events is our synodic period. That is how long it takes for the Earth to "lap" Mars once. Given that we know the orbital period of the Earth, we can use that to calculate the orbital period of Mars. Kepler's predecessors had this already figured out. This was worked out by Copernicus. Kepler got this one for free. Knowing how long Mars takes to revolve around the Sun turns it into an anchor point for us. Once we know how many days Mars takes to complete an orbit, we can look at any day, go back or forth that many days and know that Mars is in the same spot around the Sun. Do this enough times, and you can eventually trace out the orbit that the Earth takes around the Sun.
+          </p>
+
+          <figure class="plate" id="fig-1" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 1</span> Opposition: Sun, Earth and Mars in a line, Earth in the middle.</figcaption>
+          </figure>
+
+          <p>
+            Kepler had worked as the Danish astronomer Tycho Brahe's assistant. He was very protective of the data that he had gathered and would only give Kepler bits of his data while he was alive. For twenty years he was just hanging out on the island of Hven, measuring the angles of the stars and planets. He didn't have a telescope available to him when he was measuring the cosmos, so he did it all by eye. When Brahe died in 1601, Kepler took over as imperial mathematician and gained access to the rest of the data. Obtaining Brahe's work was valuable because he was diligent. His data was accurate to a couple of arcminutes. So that's what Kepler had to work with. We're instead going to use the dataset from NASA JPL's DE421 ephemeris. It covers roughly the same time span and every angle in the data is measured from one fixed direction in space. It's also all translated to the ecliptic plane measurements already so we don't have to do that from scratch. The ecliptic plane is the plane that the Earth lies on when it orbits the Sun. Brahe might've spent twenty years and one percent of Denmark's annual royal revenue collecting his data. I spent twenty minutes looking for and one second downloading a CSV file. The data that we're working with has the measurements of the angle to the Sun from the Earth, and to Mars, and on which date. With just these two angles and the date, we're going to compute the orbit of the Earth. Both Brahe's dataset and the JPL dataset are missing measurements of Mars when the angles of the Sun and Mars get too close together because you cannot see Mars when you're looking in the direction of the Sun. You might think that using JPL's precomputed values is cheating. Fine, it's a shortcut that Kepler didn't get. It's also difficult to compile all of Tycho Brahe's data that Kepler used since it's in an awkward state of raw declination tables and old style dates. And it's in Latin.
+          </p>
+
+          <figure class="plate" id="fig-2" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 2</span> Ecliptic longitude is measured from one fixed direction, not from the Earth&ndash;Sun line.</figcaption>
+          </figure>
+
+          <p>
+            Now, let's get to actually doing some calculations. Just for fun, let's calculate the orbital period of Mars the same way Copernicus did. He was the one who worked it out first, and the number that came out of that work, 687 days, is still the accepted value today. We will, however, use that accepted value for the purposes of our experiment rather than our own. How do we take our data and find the dates that Mars is in opposition? Since everything is measured from a fixed axis in space (at least relative to the stars), we need to look at the angular difference between where the Sun is and where Mars is. When this difference is 180 degrees, we know that Mars is in opposition. For our purposes, we will be looking at when the absolute angle difference is at its peak in the dataset. Measuring the time between events like this in our dataset we can find how many days apart this happens (Earth days that is).
+          </p>
+
+          <figure class="plate" id="fig-3" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 3</span> Sun&ndash;Mars angular separation over time, with the detected oppositions marked.</figcaption>
+          </figure>
+
+          <p>
+            But this period is not constant. Through our data we actually see that the synodic period of Mars wobbles a bit. Over ten oppositions that we note, there are nine gaps, and they run from 764 to 810 days. Mars is not a metronome. We need to average out all the gaps to find that the synodic period is 784 days on average. One line of algebra later, <a class="figref" href="#eq-1">eq. 1</a>
+          </p>
+
+          <figure class="plate plate--math" id="eq-1" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <figcaption><span class="plate-num">eq. 1</span> Synodic period to orbital period.</figcaption>
+          </figure>
+
+          <p>
+            we can find the orbital period of Mars to be approximately 683 days.
+          </p>
+
+          <aside class="note">
+            <span class="note-label">Editor's note</span>
+            The synodic period between the Earth and Mars is not constant because the orbits are elliptical, not circular. We do not know this yet so for the purposes of this experiment, we will assume they are circular for now. Also, because of this our estimate of Mars' orbital period is a little off, but when we do corrections later this will be adjusted.
+          </aside>
+
+          <p>
+            We can use this as our period to find Mars' anchor point, but as I said before, we will use the accepted 687 day value instead. Four days sounds insignificant. Twelve orbits later it's a month and a half, and Mars isn't there anymore. I know, cheating again. So for every 687 day period, we can add those measurements to our date set that we will use to calculate the orbit of the Earth. So we go through every date in our dataset, count how many other dates sit a whole number of Mars years away from it, and keep the winner. That date is January 1, 2000. It lines up with 20 other dates, 21 including itself. Now that we have a set of dates where we know that Mars is in the same position in its orbit, we can take two dates out of that set and use the angles measured for the Sun and Mars to triangulate the anchor point of Mars <a class="figref" href="#fig-4">fig. 4</a>.
+          </p>
+
+          <figure class="plate" id="fig-4" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 4</span> Two sightings, one fixed target: triangulating Mars from two dates a whole number of Mars years apart.</figcaption>
+          </figure>
+
+          <p>
+            Note that we are assuming that the Earth is always one astronomical unit away from the Sun (an astronomical unit (AU) is just astronomy jargon for the average distance from the Sun to the Earth). Then we do this with as many combinations of dates in this date set as we can make, and statistically filter out the outliers to get our true(er) estimate of the position of Mars in space on that periodic date.
+          </p>
+
+          <figure class="plate" id="fig-5" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 5</span> Mars triangulation: every one of the 21 aligned dates used as a baseline.</figcaption>
+          </figure>
+
+          <figure class="plate" id="fig-6" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 6</span> Distribution of the 21 per-baseline Mars&ndash;Sun distance estimates &mdash; why the median, not the mean.</figcaption>
+          </figure>
+
+          <p>
+            We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-7">fig. 7</a>.
+          </p>
+
+          <figure class="plate" id="fig-7" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 7</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
+          </figure>
+
+          <p>
+            We are going to assume, like Kepler did, that the Earth's orbit is a perfect circle. However, we cannot assume that it is centered around the Sun. Kepler knew this from one Hipparchus, who had observed that the times between the solstices and the equinoxes are not equal. The model he decided to go with and we will as well was an off-center circle <a class="figref" href="#eq-2">eq. 2</a>.
+          </p>
+
+          <figure class="plate plate--math" id="eq-2" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <figcaption><span class="plate-num">eq. 2</span> The off-center circle.</figcaption>
+          </figure>
+
+          <p>
+            This matches the property where the seasons do not align. With a little bit of linear algebra magic we find that three points give us three equations to calculate our orbit <a class="figref" href="#eq-3">eq. 3</a>.
+          </p>
+
+          <figure class="plate plate--math" id="eq-3" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <figcaption><span class="plate-num">eq. 3</span> Three points, three equations &mdash; the linear algebra simplification.</figcaption>
+          </figure>
+
+          <p>
+            We can (in theory) choose any three points on our circle to figure out our equation. In practice this doesn't work out so well. Choosing three points that are close to each other might give us the garbage result of a straight line since our measurements, no matter how precise our instruments get, are never perfect. So of all 21 days in our date set, we are going to choose days that are outside of some threshold of separation from each other. As we did before, taking just a single set of datapoints doesn't get us a good answer. So we will use every combination, in our constraints, of three points to get to a more accurate estimate of the actual equation of our fitted circle.
+          </p>
+
+          <figure class="plate" id="fig-8" data-reveal>
+            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <figcaption><span class="plate-num">fig. 8</span> Every 3-point combination out of the 21-date set, against the mean and the median.</figcaption>
+          </figure>
+
+          <p>
+            We find that the mathematical model of a circle that best fits our data has a center of <span class="gap">centre goes here</span> with a radius more closely resembling 0.9965 AU.
+          </p>
+
+          <!-- The one real drawing on the page. -->
+          <figure class="sketch" id="fig-9" data-reveal>
+            <svg viewBox="0 0 200 172" fill="none"
+                 stroke-linecap="round" stroke-linejoin="round"
+                 role="img" aria-label="The Earth's orbit drawn as a circle centred away from the Sun.">
+              <g filter="url(#ink)" stroke="currentColor">
+                <!-- Orbit: two passes, the second overshooting the start the
+                     way a compass-less hand does. -->
+                <path d="M 38 88 A 62 62 0 0 1 162 88 A 62 62 0 0 1 40 90" stroke-width="1.5"/>
+                <path d="M 42 82 A 60 60 0 0 1 158 93" stroke-width="1" opacity="0.35"/>
+
+                <!-- Centre of the circle, which is not the Sun. -->
+                <path d="M 96 88 L 104 88 M 100 84 L 100 92" stroke-width="0.9" opacity="0.55"/>
+
+                <!-- Sun at the focus, offset from that centre. -->
+                <circle cx="112" cy="94" r="4.5" fill="currentColor" stroke="none"/>
+                <path d="M 112 84 L 112 80 M 112 108 L 112 112
+                         M 102 94 L 98 94 M 122 94 L 126 94
+                         M 105 87 L 102 84 M 119 101 L 122 104
+                         M 119 87 L 122 84 M 105 101 L 102 104"
+                      stroke-width="0.9" opacity="0.7"/>
+
+                <!-- The offset itself, called out. -->
+                <path d="M 100 88 L 112 94" stroke-width="0.9" stroke-dasharray="2 2" opacity="0.75"/>
+
+                <!-- Radius out to the Earth, measured from the centre. -->
+                <path d="M 100 88 L 147 48" stroke-width="1.1" opacity="0.8"/>
+                <circle cx="147" cy="48" r="3.6" fill="currentColor" stroke="none"/>
+
+                <!-- Direction of travel. -->
+                <path d="M 54 56 A 62 62 0 0 1 72 40" stroke-width="1" opacity="0.6"/>
+                <path d="M 66 41 L 72 40 L 70 46" stroke-width="1" opacity="0.6"/>
+              </g>
+
+              <g fill="currentColor" font-family="'Caveat', cursive">
+                <text x="120" y="108" font-size="10" opacity="0.72">&#9737; Sol</text>
+                <text x="152" y="42"  font-size="10" opacity="0.72">&#8853; Terra</text>
+                <text x="60"  y="92"  font-size="9"  opacity="0.5">centrum</text>
+                <text x="112" y="62"  font-size="9"  opacity="0.6">r &#8776; 0.9965 AU</text>
+              </g>
+            </svg>
+            <figcaption><span class="plate-num">fig. 9</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>
+          </figure>
+
+          <p>
+            We have now calculated the orbit of the Earth using just a couple numbers in a spreadsheet. This means that we can place the Earth in an exact spot for any date in our dataset. In the next post we will use this to calculate the orbit of Mars.
+          </p>
+
+        </div>
+
+        <p class="entry-mark">&mdash; obs. confirmed &#10003;</p>
+      </article>
+
+      <p class="finis">&#10022; &nbsp; finis &nbsp; &#10022;</p>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!-- Refractor on an alt-az tripod. Ported from the Figma sketch's TelescopeSVG.
+     ViewBox 0 0 240 285; tube at ~34 degrees, pointing upper-left. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 285" fill="none"
+     role="img" aria-label="Refractor telescope on a tripod">
+  <defs>
+    <linearGradient id="tube" x1="0.25" y1="0" x2="0.75" y2="1">
+      <stop offset="0%"   stop-color="#31344e"/>
+      <stop offset="28%"  stop-color="#454868"/>
+      <stop offset="58%"  stop-color="#31344e"/>
+      <stop offset="100%" stop-color="#1e2030"/>
+    </linearGradient>
+    <linearGradient id="dew" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#1e1f2e"/>
+      <stop offset="100%" stop-color="#141520"/>
+    </linearGradient>
+    <linearGradient id="mount" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#252538"/>
+      <stop offset="50%"  stop-color="#353550"/>
+      <stop offset="100%" stop-color="#1e1e2e"/>
+    </linearGradient>
+    <linearGradient id="focus" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#28293c"/>
+      <stop offset="100%" stop-color="#1c1d2c"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="38%" cy="35%" r="65%">
+      <stop offset="0%"   stop-color="#1a2060" stop-opacity="0.6"/>
+      <stop offset="60%"  stop-color="#080918" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#04050e"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Dew shield -->
+  <path d="M 64 86 L 38 68 L 22 96 L 50 110 Z" fill="url(#dew)"/>
+  <path d="M 38 68 L 22 96" stroke="rgba(255,255,255,0.06)" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 64 86 L 50 110" stroke="#111220" stroke-width="1.5"/>
+  <path d="M 59 80 L 45 105" stroke="#111220" stroke-width="0.8" opacity="0.7"/>
+  <path d="M 52 74 L 37 99" stroke="#111220" stroke-width="0.8" opacity="0.5"/>
+  <path d="M 44 70 L 30 97" stroke="#111220" stroke-width="0.8" opacity="0.35"/>
+
+  <!-- Main tube -->
+  <path d="M 64 86 L 194 172 L 180 196 L 50 110 Z" fill="url(#tube)"/>
+  <path d="M 66 89 L 191 173" stroke="rgba(255,255,255,0.09)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 66 94 L 188 176" stroke="rgba(255,255,255,0.04)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Tube band rings -->
+  <path d="M 72 90 L 65 106" stroke="#161726" stroke-width="6"/>
+  <path d="M 72 90 L 65 106" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
+  <path d="M 118 114 L 111 130" stroke="#161726" stroke-width="6"/>
+  <path d="M 118 114 L 111 130" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
+  <path d="M 164 140 L 157 156" stroke="#161726" stroke-width="6"/>
+  <path d="M 164 140 L 157 156" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
+
+  <!-- Objective lens cell -->
+  <path d="M 64 86 C 54 90 50 104 50 110 L 58 114 C 58 106 60 95 68 90 Z" fill="#1a1b2c"/>
+  <ellipse cx="51" cy="98" rx="12" ry="8" transform="rotate(-34 51 98)" fill="url(#lens)"/>
+  <ellipse cx="51" cy="98" rx="12" ry="8" transform="rotate(-34 51 98)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+  <ellipse cx="47" cy="93" rx="5" ry="3.2" transform="rotate(-34 47 93)" fill="rgba(120,160,255,0.18)"/>
+  <ellipse cx="55" cy="103" rx="3" ry="2" transform="rotate(-34 55 103)" fill="rgba(160,100,255,0.1)"/>
+  <ellipse cx="51" cy="98" rx="12" ry="8" transform="rotate(-34 51 98)" fill="none" stroke="#0e0f1c" stroke-width="2.5"/>
+
+  <!-- Eyepiece drawtube end -->
+  <path d="M 194 172 L 180 196 L 188 202 L 202 178 Z" fill="#1e2030"/>
+  <path d="M 202 178 L 188 202" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <path d="M 194 172 L 202 178" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Focuser -->
+  <path d="M 131 156 L 119 164 L 107 182 L 119 174 Z" fill="url(#focus)"/>
+  <path d="M 131 156 L 119 174" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <path d="M 119 164 L 107 182" stroke="#111222" stroke-width="1"/>
+  <ellipse cx="121" cy="169" rx="5" ry="7" transform="rotate(-56 121 169)" fill="#222236"/>
+  <ellipse cx="121" cy="169" rx="5" ry="7" transform="rotate(-56 121 169)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+  <!-- Knurling on the focus knob -->
+  <line x1="116.29" y1="167.32" x2="120.70" y2="173.99" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+  <line x1="117.96" y1="166.22" x2="122.37" y2="172.89" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+  <line x1="119.63" y1="165.11" x2="124.04" y2="171.79" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+  <line x1="121.30" y1="164.01" x2="125.71" y2="170.68" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+  <path d="M 114 178 L 103 195 L 112 199 L 123 182 Z" fill="#2a2b40"/>
+  <path d="M 108 193 L 98 209 L 106 213 L 116 197 Z" fill="#1a1b2a"/>
+  <path d="M 108 193 L 116 197" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
+  <ellipse cx="102" cy="211" rx="6" ry="4" transform="rotate(-34 102 211)" fill="#080910"/>
+  <ellipse cx="102" cy="211" rx="6" ry="4" transform="rotate(-34 102 211)" stroke="rgba(255,255,255,0.09)" stroke-width="0.8"/>
+
+  <!-- Finder scope -->
+  <path d="M 88 98 L 148 130 L 144 138 L 84 106 Z" fill="#252636"/>
+  <path d="M 88 98 L 84 106" stroke="#161726" stroke-width="1.2"/>
+  <path d="M 148 130 L 144 138" stroke="#161726" stroke-width="1.2"/>
+  <ellipse cx="86" cy="102" rx="5" ry="3.5" transform="rotate(-34 86 102)" fill="#0a0b16"/>
+  <ellipse cx="86" cy="102" rx="5" ry="3.5" transform="rotate(-34 86 102)" stroke="rgba(255,255,255,0.09)" stroke-width="0.7"/>
+  <path d="M 104 106 L 104 120" stroke="#1e1f2e" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 128 120 L 128 134" stroke="#1e1f2e" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Saddle, arm, alt-az head -->
+  <path d="M 112 154 L 126 148 L 128 144 L 114 150 Z" fill="#1c1d2c"/>
+  <rect x="115" y="152" width="9" height="28" rx="3" fill="#222236"/>
+  <rect x="115" y="152" width="9" height="28" rx="3" stroke="rgba(255,255,255,0.06)" stroke-width="0.7"/>
+  <rect x="104" y="178" width="31" height="20" rx="4" fill="url(#mount)"/>
+  <rect x="104" y="178" width="31" height="20" rx="4" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+  <circle cx="104" cy="188" r="5" fill="#1c1c2c"/>
+  <circle cx="104" cy="188" r="5" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+  <circle cx="104" cy="188" r="2" fill="#141424"/>
+  <circle cx="135" cy="188" r="5" fill="#1c1c2c"/>
+  <circle cx="135" cy="188" r="5" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+  <circle cx="135" cy="188" r="2" fill="#141424"/>
+  <rect x="117" y="196" width="5" height="10" rx="2" fill="#1a1a28"/>
+  <ellipse cx="119" cy="200" rx="18" ry="6" fill="#1a1b2a"/>
+  <ellipse cx="119" cy="200" rx="18" ry="6" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+
+  <!-- Tripod -->
+  <rect x="115" y="204" width="8" height="22" rx="2" fill="#252538"/>
+  <line x1="119" y1="226" x2="72"  y2="278" stroke="#252538" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="119" y1="226" x2="72"  y2="278" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+  <line x1="119" y1="226" x2="166" y2="278" stroke="#252538" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="119" y1="226" x2="166" y2="278" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+  <line x1="119" y1="226" x2="119" y2="281" stroke="#252538" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="119" y1="226" x2="119" y2="281" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+  <path d="M 82 255 Q 119 248 156 255" stroke="#1e1e30" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M 82 255 Q 119 248 156 255" stroke="rgba(255,255,255,0.04)" stroke-width="1" fill="none"/>
+  <ellipse cx="72"  cy="279" rx="6" ry="2.5" fill="#191928"/>
+  <ellipse cx="166" cy="279" rx="6" ry="2.5" fill="#191928"/>
+  <ellipse cx="119" cy="282" rx="6" ry="2.5" fill="#191928"/>
+  <ellipse cx="119" cy="283" rx="48" ry="3.5" fill="rgba(0,0,0,0.28)"/>
+</svg>
