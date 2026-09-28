@@ -12,6 +12,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{Document, HtmlCanvasElement, Window};
 
 mod canvas;
+mod figref;
 mod reveal;
 mod starfield;
 
@@ -25,6 +26,7 @@ pub fn start() -> Result<(), JsValue> {
 
     mount_all(&document)?;
     reveal::mount(&document)?;
+    figref::mount(&document)?;
     Ok(())
 }
 
