@@ -17,6 +17,7 @@ watch = [
   "src",
   "assets/css",
   "assets/fonts",
+  "assets/figures",
   "assets/hand-preview.html",
   "assets/telescope.svg",
   "Cargo.toml",

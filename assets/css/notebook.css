@@ -125,7 +125,8 @@ figure { margin: 2.5rem 0; }
 
 figcaption {
   margin-top: 0.6rem;
-  font-family: var(--display);
+  /* The body's face, so captions follow the handwriting toggle with it. */
+  font-family: inherit;
   font-size: 0.95rem;
   line-height: 1.35;
   text-align: center;
@@ -194,6 +195,22 @@ figcaption {
 }
 
 .sketch svg { width: 100%; height: auto; }
+
+/* Traced drawings from tools/figures/. The ink is currentColor, so it takes
+   the page's ink and warms the same way the sketches do. */
+.plate-art {
+  color: var(--ink);
+  opacity: 0.88;
+  filter: sepia(0.3);
+}
+
+.plate-art svg { display: block; width: 100%; height: auto; }
+
+/* Labels are set in the scanned hand whichever body font is showing. */
+.fig-label {
+  font-family: var(--scan);
+  font-feature-settings: "calt" 1;
+}
 
 /* Figures fade in when scrolled to. `js-reveal` is set by src/reveal.rs, so
    if the wasm never loads they are simply visible instead of stuck hidden. */
