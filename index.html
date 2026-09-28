@@ -101,18 +101,15 @@
             Kepler had worked as the Danish astronomer Tycho Brahe's assistant. He was very protective of the data that he had gathered and would only give Kepler bits of his data while he was alive. For twenty years he was just hanging out on the island of Hven, measuring the angles of the stars and planets. He didn't have a telescope available to him when he was measuring the cosmos, so he did it all by eye. When Brahe died in 1601, Kepler took over as imperial mathematician and gained access to the rest of the data. Obtaining Brahe's work was valuable because he was diligent. His data was accurate to a couple of arcminutes. So that's what Kepler had to work with. We're instead going to use the dataset from NASA JPL's DE421 ephemeris. It covers roughly the same time span and every angle in the data is measured from one fixed direction in space. It's also all translated to the ecliptic plane measurements already so we don't have to do that from scratch. The ecliptic plane is the plane that the Earth lies on when it orbits the Sun. Brahe might've spent twenty years and one percent of Denmark's annual royal revenue collecting his data. I spent twenty minutes looking for and one second downloading a CSV file. The data that we're working with has the measurements of the angle to the Sun from the Earth, and to Mars, and on which date. With just these two angles and the date, we're going to compute the orbit of the Earth. Both Brahe's dataset and the JPL dataset are missing measurements of Mars when the angles of the Sun and Mars get too close together because you cannot see Mars when you're looking in the direction of the Sun. You might think that using JPL's precomputed values is cheating. Fine, it's a shortcut that Kepler didn't get. It's also difficult to compile all of Tycho Brahe's data that Kepler used since it's in an awkward state of raw declination tables and old style dates. And it's in Latin.
           </p>
 
-          <figure class="plate" id="fig-2" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 2</span> Ecliptic longitude is measured from one fixed direction, not from the Earth&ndash;Sun line.</figcaption>
-          </figure>
-
           <p>
             Now, let's get to actually doing some calculations. Just for fun, let's calculate the orbital period of Mars the same way Copernicus did. He was the one who worked it out first, and the number that came out of that work, 687 days, is still the accepted value today. We will, however, use that accepted value for the purposes of our experiment rather than our own. How do we take our data and find the dates that Mars is in opposition? Since everything is measured from a fixed axis in space (at least relative to the stars), we need to look at the angular difference between where the Sun is and where Mars is. When this difference is 180 degrees, we know that Mars is in opposition. For our purposes, we will be looking at when the absolute angle difference is at its peak in the dataset. Measuring the time between events like this in our dataset we can find how many days apart this happens (Earth days that is).
           </p>
 
-          <figure class="plate" id="fig-3" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 3</span> Sun&ndash;Mars angular separation over time, with the detected oppositions marked.</figcaption>
+          <figure class="plate" id="fig-2" data-reveal>
+            <!-- Placeholder from tools/figures/fig2_placeholder.py, to draw the
+                 real figure from. Replace with the hand-drawn version. -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig2.svg"></div>
+            <figcaption><span class="plate-num">fig. 2</span> Sun&ndash;Mars angular separation over time, with the detected oppositions marked. Sketch, not to scale.</figcaption>
           </figure>
 
           <p>
@@ -120,7 +117,8 @@
           </p>
 
           <figure class="plate plate--math" id="eq-1" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <!-- Built by tools/figures/figure.py; copies as LaTeX (eq1/labels.json). -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/eq1.svg"></div>
             <figcaption><span class="plate-num">eq. 1</span> Synodic period to orbital period.</figcaption>
           </figure>
 
@@ -134,35 +132,35 @@
           </aside>
 
           <p>
-            We can use this as our period to find Mars' anchor point, but as I said before, we will use the accepted 687 day value instead. Four days sounds insignificant. Twelve orbits later it's a month and a half, and Mars isn't there anymore. I know, cheating again. So for every 687 day period, we can add those measurements to our date set that we will use to calculate the orbit of the Earth. So we go through every date in our dataset, count how many other dates sit a whole number of Mars years away from it, and keep the winner. That date is January 1, 2000. It lines up with 20 other dates, 21 including itself. Now that we have a set of dates where we know that Mars is in the same position in its orbit, we can take two dates out of that set and use the angles measured for the Sun and Mars to triangulate the anchor point of Mars <a class="figref" href="#fig-4">fig. 4</a>.
+            We can use this as our period to find Mars' anchor point, but as I said before, we will use the accepted 687 day value instead. Four days sounds insignificant. Twelve orbits later it's a month and a half, and Mars isn't there anymore. I know, cheating again. So for every 687 day period, we can add those measurements to our date set that we will use to calculate the orbit of the Earth. So we go through every date in our dataset, count how many other dates sit a whole number of Mars years away from it, and keep the winner. That date is January 1, 2000. It lines up with 20 other dates, 21 including itself. Now that we have a set of dates where we know that Mars is in the same position in its orbit, we can take two dates out of that set and use the angles measured for the Sun and Mars to triangulate the anchor point of Mars <a class="figref" href="#fig-3">fig. 3</a>.
           </p>
 
-          <figure class="plate" id="fig-4" data-reveal>
+          <figure class="plate" id="fig-3" data-reveal>
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 4</span> Two sightings, one fixed target: triangulating Mars from two dates a whole number of Mars years apart.</figcaption>
+            <figcaption><span class="plate-num">fig. 3</span> Two sightings, one fixed target: triangulating Mars from two dates a whole number of Mars years apart.</figcaption>
           </figure>
 
           <p>
             Note that we are assuming that the Earth is always one astronomical unit away from the Sun (an astronomical unit (AU) is just astronomy jargon for the average distance from the Sun to the Earth). Then we do this with as many combinations of dates in this date set as we can make, and statistically filter out the outliers to get our true(er) estimate of the position of Mars in space on that periodic date.
           </p>
 
-          <figure class="plate" id="fig-5" data-reveal>
+          <figure class="plate" id="fig-4" data-reveal>
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 5</span> Mars triangulation: every one of the 21 aligned dates used as a baseline.</figcaption>
+            <figcaption><span class="plate-num">fig. 4</span> Mars triangulation: every one of the 21 aligned dates used as a baseline.</figcaption>
           </figure>
 
-          <figure class="plate" id="fig-6" data-reveal>
+          <figure class="plate" id="fig-5" data-reveal>
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 6</span> Distribution of the 21 per-baseline Mars&ndash;Sun distance estimates &mdash; why the median, not the mean.</figcaption>
+            <figcaption><span class="plate-num">fig. 5</span> Distribution of the 21 per-baseline Mars&ndash;Sun distance estimates &mdash; why the median, not the mean.</figcaption>
           </figure>
 
           <p>
-            We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-7">fig. 7</a>.
+            We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-6">fig. 6</a>.
           </p>
 
-          <figure class="plate" id="fig-7" data-reveal>
+          <figure class="plate" id="fig-6" data-reveal>
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 7</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
+            <figcaption><span class="plate-num">fig. 6</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
           </figure>
 
           <p>
@@ -187,9 +185,9 @@
             We can (in theory) choose any three points on our circle to figure out our equation. In practice this doesn't work out so well. Choosing three points that are close to each other might give us the garbage result of a straight line since our measurements, no matter how precise our instruments get, are never perfect. So of all 21 days in our date set, we are going to choose days that are outside of some threshold of separation from each other. As we did before, taking just a single set of datapoints doesn't get us a good answer. So we will use every combination, in our constraints, of three points to get to a more accurate estimate of the actual equation of our fitted circle.
           </p>
 
-          <figure class="plate" id="fig-8" data-reveal>
+          <figure class="plate" id="fig-7" data-reveal>
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 8</span> Every 3-point combination out of the 21-date set, against the mean and the median.</figcaption>
+            <figcaption><span class="plate-num">fig. 7</span> Every 3-point combination out of the 21-date set, against the mean and the median.</figcaption>
           </figure>
 
           <p>
@@ -197,7 +195,7 @@
           </p>
 
           <!-- The one real drawing on the page. -->
-          <figure class="sketch" id="fig-9" data-reveal>
+          <figure class="sketch" id="fig-8" data-reveal>
             <svg viewBox="0 0 200 172" fill="none"
                  stroke-linecap="round" stroke-linejoin="round"
                  role="img" aria-label="The Earth's orbit drawn as a circle centred away from the Sun.">
@@ -237,7 +235,7 @@
                 <text x="112" y="62"  font-size="9"  opacity="0.6">r &#8776; 0.9965 AU</text>
               </g>
             </svg>
-            <figcaption><span class="plate-num">fig. 9</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>
+            <figcaption><span class="plate-num">fig. 8</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>
           </figure>
 
           <p>

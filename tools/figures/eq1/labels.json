@@ -1,0 +1,6 @@
+[
+ {"kind": "copy", "text": "$T_M$ = Orbital period of Mars", "x": 30, "y": 30, "w": 671, "h": 97},
+ {"kind": "copy", "text": "$T_E$ = Orbital period of the Earth", "x": 757, "y": 30, "w": 658, "h": 90},
+ {"kind": "copy", "text": "$S$ = Synodic period Earth & Mars", "x": 1516, "y": 31, "w": 733, "h": 84},
+ {"kind": "copy", "text": "$$T_M = \\left(\\frac{1}{T_E} - \\frac{1}{S}\\right)^{-1}$$", "x": 602, "y": 126, "w": 585, "h": 185}
+]

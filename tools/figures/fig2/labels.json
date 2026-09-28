@@ -1,0 +1,171 @@
+[
+ {
+  "text": "2000",
+  "x": 82.1,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2002",
+  "x": 231.4,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2004",
+  "x": 380.8,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2006",
+  "x": 530.2,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2008",
+  "x": 679.5,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2010",
+  "x": 828.9,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2012",
+  "x": 978.3,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2014",
+  "x": 1127.6,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "2016",
+  "x": 1277.0,
+  "y": 878.9,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "180\u00b0",
+  "x": 36,
+  "y": 48.9,
+  "size": 41.5,
+  "align": "end",
+  "target": null
+ },
+ {
+  "text": "90\u00b0",
+  "x": 36,
+  "y": 450.9,
+  "size": 41.5,
+  "align": "end",
+  "target": null
+ },
+ {
+  "text": "0\u00b0",
+  "x": 36,
+  "y": 832.9,
+  "size": 41.5,
+  "align": "end",
+  "target": null
+ },
+ {
+  "text": "Year",
+  "x": 692,
+  "y": 937.0,
+  "size": 41.5,
+  "align": "middle",
+  "target": null
+ },
+ {
+  "text": "Angle between the Sun and Mars",
+  "x": -60,
+  "y": 426,
+  "size": 41.5,
+  "align": "middle",
+  "target": null,
+  "rotate": -90
+ },
+ {
+  "kind": "legend",
+  "text": "Opposition",
+  "x": 1100,
+  "y": -22,
+  "size": 41.5,
+  "target": null
+ },
+ {
+  "kind": "mark",
+  "x": 209.4,
+  "y": 59.2,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 349.7,
+  "y": 56.6,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 518.3,
+  "y": 51.1,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 664.7,
+  "y": 62.1,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 825.8,
+  "y": 61.8,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 989.1,
+  "y": 51.7,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 1144.4,
+  "y": 62.6,
+  "size": 24.9
+ },
+ {
+  "kind": "mark",
+  "x": 1322.5,
+  "y": 66.3,
+  "size": 24.9
+ }
+]
