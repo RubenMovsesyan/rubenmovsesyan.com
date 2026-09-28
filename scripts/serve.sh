@@ -28,5 +28,9 @@ rustup target list --installed | grep -qx wasm32-unknown-unknown || {
   rustup target add wasm32-unknown-unknown
 }
 
+# Trunk.toml ignores these, and trunk refuses to start if an ignored path is
+# missing -- which they are in a fresh checkout.
+mkdir -p target dist
+
 echo "Serving on http://127.0.0.1:${PORT}  (ctrl-c to stop)"
 exec trunk serve --port "$PORT" "${ARGS[@]+"${ARGS[@]}"}"
