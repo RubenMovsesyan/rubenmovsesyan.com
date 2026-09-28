@@ -206,6 +206,17 @@ figcaption {
 
 .plate-art svg { display: block; width: 100%; height: auto; }
 
+/* Invisible text over the handwriting (figure.py "copy" boxes): selecting
+   the drawing selects this, so an equation copies as its LaTeX. The fill
+   alone doesn't hide it -- Chrome paints selected text in the selection
+   colour regardless -- so it is also set in a font with no visible glyphs. */
+.fig-copy {
+  fill: transparent;
+  font-family: "Copy Blank";
+  white-space: pre;
+}
+.fig-copy::selection { background: rgba(122, 74, 40, 0.25); }
+
 /* Labels are set in the scanned hand whichever body font is showing. */
 .fig-label {
   font-family: var(--scan);

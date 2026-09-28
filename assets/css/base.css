@@ -48,6 +48,15 @@
   size-adjust: 140%;
 }
 
+/* Every glyph empty; for the invisible copy text over figures (notebook.css
+   .fig-copy). Built by tools/figures/blank_font.py. `block` so the text is
+   never briefly drawn in a fallback face. */
+@font-face {
+  font-family: "Copy Blank";
+  src: url("fonts/blank.woff2") format("woff2");
+  font-display: block;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html {

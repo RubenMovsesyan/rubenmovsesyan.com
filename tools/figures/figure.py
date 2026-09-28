@@ -89,6 +89,12 @@ def cmd_trace(args):
 
     flat, paper = load_ink(args.photo, args.rotate)
     ink = despeckle((flat < args.threshold) & paper, args.min_area)
+    # A sheet can hold more than one drawing; --region picks one out.
+    if args.region:
+        x0, y0, x1, y1 = (int(v) for v in args.region.split(","))
+        keep = np.zeros_like(ink)
+        keep[y0:y1, x0:x1] = True
+        ink &= keep
     if not ink.any():
         raise SystemExit("no ink found; try a higher --threshold")
 
@@ -172,18 +178,75 @@ class Metrics:
         return em * size
 
 
+# How far along its width a label's x sits, per "align" (SVG text-anchor).
+ALIGN_SHIFT = {"start": 0.0, "middle": 0.5, "end": 1.0}
+
+
 def text_box(label, metrics):
-    """(x0, y0, x1, y1) of a label. x, y is the left end of its baseline."""
+    """(x0, y0, x1, y1) of a label. x, y is on its baseline: the left end,
+    the middle or the right end, as its "align" says (start by default)."""
     s = label["size"]
     w = metrics.width(label["text"], s)
+    x0 = label["x"] - w * ALIGN_SHIFT[label.get("align", "start")]
     # The hand's capitals reach ~0.7em, and the size-adjust lifts that.
-    return label["x"], label["y"] - 0.75 * s * SIZE_ADJUST, label["x"] + w, label["y"] + 0.1 * s
+    return x0, label["y"] - 0.75 * s * SIZE_ADJUST, x0 + w, label["y"] + 0.1 * s
+
+
+# An X mark is this fraction of the default label size across.
+MARK_FRACTION = 0.6
+
+
+def kind(item):
+    """labels.json holds text labels, X marks, legend entries (an X followed
+    by its text), and copy boxes. Entries without a kind are text.
+
+    A copy box is invisible text laid over part of the drawing -- the text
+    layer of a scanned PDF, in effect. Selecting the handwriting selects it,
+    so copying an equation yields its LaTeX rather than nothing."""
+    return item.get("kind", "text")
+
+
+def rotate_point(px, py, ox, oy, deg):
+    """SVG rotate(deg) about (ox, oy). y points down, so -90 turns text to
+    read from bottom to top."""
+    t = np.radians(deg)
+    dx, dy = px - ox, py - oy
+    return ox + dx * np.cos(t) - dy * np.sin(t), oy + dx * np.sin(t) + dy * np.cos(t)
+
+
+def legend_parts(item):
+    """A legend entry's X (centre, span) and where its text starts."""
+    s = item["size"]
+    span = s * MARK_FRACTION
+    centre = (item["x"] + span / 2, item["y"] - 0.35 * s * SIZE_ADJUST)
+    return centre, span, item["x"] + span + 0.4 * s
+
+
+def bounds(item, metrics):
+    """Axis-aligned (x0, y0, x1, y1) of any entry, rotation included."""
+    k = kind(item)
+    if k == "mark":
+        h = item["size"] / 2
+        return item["x"] - h, item["y"] - h, item["x"] + h, item["y"] + h
+    if k == "copy":
+        return item["x"], item["y"], item["x"] + item["w"], item["y"] + item["h"]
+    if k == "legend":
+        (cx, cy), span, tx = legend_parts(item)
+        _, y0, x1, y1 = text_box({**item, "x": tx, "align": "start"}, metrics)
+        return item["x"], min(y0, cy - span / 2), x1, max(y1, cy + span / 2)
+    x0, y0, x1, y1 = text_box(item, metrics)
+    deg = item.get("rotate", 0)
+    if not deg:
+        return x0, y0, x1, y1
+    xs, ys = zip(*(rotate_point(px, py, item["x"], item["y"], deg)
+                   for px in (x0, x1) for py in (y0, y1)))
+    return min(xs), min(ys), max(xs), max(ys)
 
 
 def leader(label, metrics):
     """The leader line: from just outside the label's box to its target."""
     tx, ty = label["target"]
-    x0, y0, x1, y1 = text_box(label, metrics)
+    x0, y0, x1, y1 = bounds(label, metrics)
     cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     dx, dy = tx - cx, ty - cy
     dist = float(np.hypot(dx, dy))
@@ -202,6 +265,12 @@ def leader(label, metrics):
 # ─── render ─────────────────────────────────────────────────────────────────
 
 
+def x_path(cx, cy, span):
+    h = span / 2
+    return (f"M{cx - h:.1f} {cy - h:.1f}L{cx + h:.1f} {cy + h:.1f}"
+            f"M{cx - h:.1f} {cy + h:.1f}L{cx + h:.1f} {cy - h:.1f}")
+
+
 def render(name):
     d = fig_dir(name)
     meta = json.loads((d / "meta.json").read_text())
@@ -210,8 +279,29 @@ def render(name):
     drawing = (d / "drawing.svg").read_text()
 
     stroke = meta["stroke"]
+    # Marks and leaders are drawn at the pen's width, so they match the ink.
+    pen = f'fill="none" stroke="currentColor" stroke-width="{stroke:.1f}" stroke-linecap="round"'
     parts = ['  <g class="fig-labels">']
     for lab in labels:
+        k = kind(lab)
+        if k == "mark":
+            parts.append(f'    <path class="fig-mark" d="{x_path(lab["x"], lab["y"], lab["size"])}" {pen}/>')
+            continue
+        if k == "copy":
+            # Stretched to fill its box, so the selection highlight covers
+            # the handwriting it stands for. Font size is the box height;
+            # most of an em sits above the baseline.
+            parts.append(
+                f'    <text class="fig-copy" x="{lab["x"]:.1f}" y="{lab["y"] + 0.8 * lab["h"]:.1f}" '
+                f'font-size="{lab["h"]:.1f}" textLength="{lab["w"]:.1f}" '
+                f'lengthAdjust="spacingAndGlyphs">{html.escape(lab["text"])}</text>'
+            )
+            continue
+        x, align = lab["x"], lab.get("align", "start")
+        if k == "legend":
+            (cx, cy), span, x = legend_parts(lab)
+            align = "start"
+            parts.append(f'    <path class="fig-mark" d="{x_path(cx, cy, span)}" {pen}/>')
         if lab.get("target"):
             seg = leader(lab, metrics)
             if seg:
@@ -220,16 +310,19 @@ def render(name):
                     f'x2="{seg[2]:.1f}" y2="{seg[3]:.1f}" stroke="currentColor" '
                     f'stroke-width="{stroke:.1f}" stroke-linecap="round"/>'
                 )
+        rot = lab.get("rotate", 0)
+        turn = f' transform="rotate({rot} {lab["x"]:.1f} {lab["y"]:.1f})"' if rot else ""
         parts.append(
-            f'    <text class="fig-label" x="{lab["x"]:.1f}" y="{lab["y"]:.1f}" '
-            f'font-size="{lab["size"]:.1f}" fill="currentColor">{html.escape(lab["text"])}</text>'
+            f'    <text class="fig-label" x="{x:.1f}" y="{lab["y"]:.1f}" '
+            f'font-size="{lab["size"]:.1f}" text-anchor="{align}"{turn} '
+            f'fill="currentColor">{html.escape(lab["text"])}</text>'
         )
     parts.append("  </g>")
 
     # Text can sit outside the drawing; widen the viewBox to take it in.
     x0, y0, x1, y1 = 0.0, 0.0, float(meta["width"]), float(meta["height"])
     for lab in labels:
-        bx0, by0, bx1, by1 = text_box(lab, metrics)
+        bx0, by0, bx1, by1 = bounds(lab, metrics)
         x0, y0, x1, y1 = min(x0, bx0), min(y0, by0), max(x1, bx1), max(y1, by1)
     pad = stroke * 2
     box = f"{x0 - pad:.0f} {y0 - pad:.0f} {x1 - x0 + 2 * pad:.0f} {y1 - y0 + 2 * pad:.0f}"
@@ -238,7 +331,7 @@ def render(name):
     svg = (
         f'<svg class="fig-art" xmlns="http://www.w3.org/2000/svg" viewBox="{box}" '
         f'role="img" aria-labelledby="{name}-title">\n'
-        f'  <title id="{name}-title">{html.escape(", ".join(l["text"] for l in labels))}</title>'
+        f'  <title id="{name}-title">{html.escape(", ".join(l["text"] for l in labels if kind(l) != "mark"))}</title>'
         f"{body}\n" + "\n".join(parts) + "\n</svg>\n"
     )
     OUT.mkdir(parents=True, exist_ok=True)
@@ -256,10 +349,10 @@ def cmd_render(args):
 
 
 HELP = (
-    "n new label  ·  click a label to select, drag to move  ·  "
-    "t set its target (then click)  ·  x remove target\n"
-    "e edit text  ·  + / - size  ·  arrows nudge  ·  d delete  ·  "
-    "s save  ·  q save + quit"
+    "n new label  ·  m place X marks (Esc ends)  ·  g new legend entry  ·  "
+    "click to select, drag to move\n"
+    "t set target (then click)  ·  x remove target  ·  r rotate  ·  e edit text  ·  "
+    "+ / - size  ·  arrows nudge  ·  d delete  ·  s save  ·  q save + quit"
 )
 
 
@@ -290,7 +383,7 @@ def cmd_label(args):
     W, H = meta["width"], meta["height"]
 
     fig, ax = plt.subplots(figsize=(9, 9 * H / W + 1.2))
-    plt.subplots_adjust(left=0.02, right=0.98, top=0.93, bottom=0.1)
+    plt.subplots_adjust(left=0.02, right=0.98, top=0.88, bottom=0.1)
     ax.imshow(img, cmap="gray", vmin=0, vmax=255, alpha=0.9)
     # Room around the drawing for labels that sit outside it.
     pad = 0.25 * max(W, H)
@@ -320,13 +413,34 @@ def cmd_label(args):
             a.remove()
         artists.clear()
         k = pt_per_unit()
+        lw = max(meta["stroke"] * k, 0.8)
         for i, lab in enumerate(labels):
             colour = "#c0392b" if i == state["sel"] else "#2e1a0e"
-            artists.append(ax.text(
-                lab["x"], lab["y"], lab["text"], fontproperties=hand,
-                fontsize=lab["size"] * SIZE_ADJUST * k, color=colour, va="baseline", ha="left",
-            ))
-            x0, y0, x1, y1 = text_box(lab, metrics)
+            kd = kind(lab)
+            if kd == "copy":
+                artists.append(ax.add_patch(plt.Rectangle(
+                    (lab["x"], lab["y"]), lab["w"], lab["h"], fill=False, ec=colour, ls="--", lw=0.8)))
+                artists.append(ax.text(lab["x"], lab["y"] - 4, "copies as: " + lab["text"],
+                                       fontsize=7, color=colour, va="bottom"))
+                continue
+            if kd != "text":
+                (cx, cy), span = ((lab["x"], lab["y"]), lab["size"]) if kd == "mark" else legend_parts(lab)[:2]
+                h = span / 2
+                for ys in ([cy - h, cy + h], [cy + h, cy - h]):
+                    artists.extend(ax.plot([cx - h, cx + h], ys, color=colour, lw=lw,
+                                           solid_capstyle="round"))
+            if kd != "mark":
+                tx = legend_parts(lab)[2] if kd == "legend" else lab["x"]
+                align = "start" if kd == "legend" else lab.get("align", "start")
+                # matplotlib turns anticlockwise for positive angles, SVG
+                # clockwise, so the sign flips.
+                artists.append(ax.text(
+                    tx, lab["y"], lab["text"], fontproperties=hand,
+                    fontsize=lab["size"] * SIZE_ADJUST * k, color=colour, va="baseline",
+                    ha={"start": "left", "middle": "center", "end": "right"}[align],
+                    rotation=-lab.get("rotate", 0), rotation_mode="anchor",
+                ))
+            x0, y0, x1, y1 = bounds(lab, metrics)
             if i == state["sel"]:
                 artists.append(ax.add_patch(plt.Rectangle(
                     (x0, y0), x1 - x0, y1 - y0, fill=False, ec=colour, ls=":", lw=0.8)))
@@ -334,14 +448,14 @@ def cmd_label(args):
                 seg = leader(lab, metrics)
                 if seg:
                     artists.extend(ax.plot([seg[0], seg[2]], [seg[1], seg[3]], color=colour,
-                                       lw=max(meta["stroke"] * k, 0.8), solid_capstyle="round"))
+                                           lw=lw, solid_capstyle="round"))
         fig.canvas.draw_idle()
 
     def hit(x, y):
         """Index of the label under a point, if any."""
         for i in reversed(range(len(labels))):
-            x0, y0, x1, y1 = text_box(labels[i], metrics)
-            m = labels[i]["size"] * 0.3
+            x0, y0, x1, y1 = bounds(labels[i], metrics)
+            m = labels[i].get("size", 20) * 0.3
             if x0 - m <= x <= x1 + m and y0 - m <= y <= y1 + m:
                 return i
         return None
@@ -355,8 +469,9 @@ def cmd_label(args):
 
     def on_submit(text):
         text = text.strip()
-        if state["mode"] == "new" and text:
-            state["mode"] = ("place", text)
+        if state["mode"] in ("new", "new-legend") and text:
+            what = "legend" if state["mode"] == "new-legend" else "text"
+            state["mode"] = ("place", text, what)
             status(f"click where '{text}' goes (its baseline starts at the click)")
         elif state["mode"] == "edit" and text and state["sel"] is not None:
             labels[state["sel"]]["text"] = text
@@ -371,11 +486,25 @@ def cmd_label(args):
         x, y = float(event.xdata), float(event.ydata)
         mode = state["mode"]
         if isinstance(mode, tuple) and mode[0] == "place":
-            labels.append({"text": mode[1], "x": round(x, 1), "y": round(y, 1),
-                           "size": default_size(meta), "target": None})
-            state["sel"], state["mode"], state["dirty"] = len(labels) - 1, "target", True
+            item = {"text": mode[1], "x": round(x, 1), "y": round(y, 1),
+                    "size": default_size(meta), "target": None}
+            if mode[2] == "legend":
+                item["kind"] = "legend"
+            labels.append(item)
+            state["sel"], state["dirty"] = len(labels) - 1, True
             textbox.set_val("")
-            status("now click the point it refers to (or press Esc for no line)")
+            if mode[2] == "legend":
+                state["mode"] = None
+                status("legend entry placed")
+            else:
+                state["mode"] = "target"
+                status("now click the point it refers to (or press Esc for no line)")
+        elif mode == "mark":
+            labels.append({"kind": "mark", "x": round(x, 1), "y": round(y, 1),
+                           "size": round(default_size(meta) * MARK_FRACTION, 1)})
+            state["sel"], state["dirty"] = len(labels) - 1, True
+            n = sum(kind(l) == "mark" for l in labels)
+            status(f"{n} marks. click for another, Esc to stop")
         elif mode == "target" and state["sel"] is not None:
             labels[state["sel"]]["target"] = [round(x, 1), round(y, 1)]
             state["mode"], state["dirty"] = None, True
@@ -385,7 +514,7 @@ def cmd_label(args):
             state["sel"] = i
             if i is not None:
                 state["drag"] = (x - labels[i]["x"], y - labels[i]["y"])
-                status(f"selected '{labels[i]['text']}'")
+                status(f"selected '{labels[i].get('text', 'X mark')}'")
         redraw()
 
     def on_motion(event):
@@ -416,6 +545,14 @@ def cmd_label(args):
             textbox.set_val("")
             textbox.begin_typing()
             status("type the label, then Enter")
+        elif key == "m":
+            state["mode"] = "mark"
+            status("click to place an X; keep clicking for more, Esc to stop")
+        elif key == "g":
+            state["mode"] = "new-legend"
+            textbox.set_val("")
+            textbox.begin_typing()
+            status("type the legend text, then Enter")
         elif key == "escape":
             state["mode"] = None
             status("")
@@ -427,6 +564,22 @@ def cmd_label(args):
             return
         elif sel is None:
             return
+        elif key in ("t", "e", "r") and kind(labels[sel]) == "mark":
+            status("marks have no text or target; drag, resize or delete them")
+            fig.canvas.draw_idle()
+            return
+        elif key in ("t", "r", "+", "=", "-") and kind(labels[sel]) == "copy":
+            status("copy boxes can be dragged, edited (e) or deleted (d)")
+            fig.canvas.draw_idle()
+            return
+        elif key == "r" and kind(labels[sel]) != "text":
+            status("only text labels rotate")
+            fig.canvas.draw_idle()
+            return
+        elif key == "r":
+            labels[sel]["rotate"] = 0 if labels[sel].get("rotate") else -90
+            if not labels[sel]["rotate"]:
+                del labels[sel]["rotate"]
         elif key == "t":
             state["mode"] = "target"
             status("click the point this label refers to")
@@ -483,6 +636,8 @@ def main():
                    help="ink is darker than this fraction of the local paper")
     t.add_argument("--min-area", type=int, default=40, help="drop specks smaller than this")
     t.add_argument("--margin", type=int, default=30, help="pixels kept around the ink")
+    t.add_argument("--region", default=None,
+                   help="x0,y0,x1,y1 in photo pixels (after EXIF rotation): only ink inside is used")
     t.add_argument("--join", type=int, default=30,
                    help="ink this close is one drawing; the largest drawing is kept (0 keeps all)")
     t.set_defaults(func=cmd_trace)
