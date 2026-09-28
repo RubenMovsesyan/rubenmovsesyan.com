@@ -32,7 +32,7 @@ import glyphset  # noqa: E402
 UPM = 1000
 CAP_HEIGHT = 700          # where capitals land; sets the global scale
 SIDEBEARING = 34          # breathing room each side of every glyph
-SPACE_WIDTH = 260
+SPACE_WIDTH = 340
 
 DESCENDERS = glyphset.DESCENDERS
 
