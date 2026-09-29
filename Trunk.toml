@@ -23,7 +23,10 @@ watch = [
   "Cargo.toml",
   "Cargo.lock",
 ]
-ignore = ["dist", "target", "tools", "scripts", "assets/img", "assets/tests"]
+# Only directories that always exist: trunk refuses to start if an ignored
+# path is missing. assets/img and assets/tests (the DNGs, left out of the
+# checkout) are simply never watched.
+ignore = ["dist", "target", "tools", "scripts"]
 
 [[hooks]]
 stage = "pre_build"
