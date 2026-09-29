@@ -116,6 +116,69 @@
   opacity: 0.6;
 }
 
+/* Back to the contents, from an entry: a note in the corner of the page. */
+.page-nav {
+  margin: -1.5rem 0 2rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+}
+.page-nav a {
+  color: var(--ink-margin);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 200ms ease;
+}
+.page-nav a:hover { opacity: 1; }
+
+/* ── Contents ──────────────────────────────────────────────────────────── */
+
+/* The index at the front of the notebook: each entry's number, title and
+   date on one line, joined by a dotted leader, the description beneath. */
+.toc {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+}
+.toc-entry + .toc-entry { margin-top: 1.75rem; }
+
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.toc-num,
+.toc-date {
+  flex: none;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: var(--ink-date);
+}
+.toc-num { font-weight: 700; }
+.toc-date { opacity: 0.8; }
+
+.toc-title {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  line-height: 1.2;
+  transition: color 200ms ease;
+}
+.toc-link:hover .toc-title { color: var(--ink-margin); }
+
+.toc-leader {
+  flex: 1;
+  min-width: 2rem;
+  border-bottom: 2px dotted var(--ink-faint);
+  transform: translateY(-0.35em);
+}
+
+.toc-desc {
+  margin: 0.3rem 0 0;
+  color: var(--ink-soft);
+}
+
 /* ── Figures ───────────────────────────────────────────────────────────── */
 
 /* Holds the shared <defs> only; never painted. */
@@ -223,7 +286,7 @@ figcaption {
   font-feature-settings: "calt" 1;
 }
 
-/* Figures fade in when scrolled to. `js-reveal` is set by src/reveal.rs, so
+/* Figures fade in when scrolled to. `js-reveal` is set by crates/astronomy-site/src/reveal.rs, so
    if the wasm never loads they are simply visible instead of stuck hidden. */
 .js-reveal [data-reveal] {
   opacity: 0;
@@ -295,4 +358,8 @@ figcaption {
   }
 
   .sketch { width: min(16rem, 100%); }
+
+  /* Too narrow for a leader: let the title wrap under its number. */
+  .toc-link { flex-wrap: wrap; column-gap: 0.5rem; row-gap: 0; }
+  .toc-leader { display: none; }
 }

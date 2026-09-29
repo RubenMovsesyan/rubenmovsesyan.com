@@ -177,7 +177,7 @@ canvas, svg, img { display: block; }
 
 /* ── Handwriting toggle ─────────────────────────────────────────────────
    Temporary, for judging the scanned font in place. Remove along with the
-   @font-face and the font-test scaffolding in index.html. */
+   @font-face and the font-test scaffolding in layout.html. */
 
 .hw-toggle { position: absolute; opacity: 0; pointer-events: none; }
 
@@ -211,7 +211,8 @@ canvas, svg, img { display: block; }
 
 /* Body text swaps to the scan; the Caveat ornament is left alone. */
 body:has(.hw-toggle:checked) .prose,
-body:has(.hw-toggle:checked) .note {
+body:has(.hw-toggle:checked) .note,
+body:has(.hw-toggle:checked) .toc-desc {
   font-family: var(--scan);
   font-feature-settings: "calt" 1;
 }

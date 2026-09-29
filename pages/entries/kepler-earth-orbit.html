@@ -1,91 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Astronomical Observations</title>
-  <meta name="description" content="Mapping the orbit of the Earth, the way Kepler did — field notes from the eyepiece.">
+<!--
+Entry I of the astronomy blog. crates/astronomy-pages wraps this in the entry
+header (number, date, title), the page layout, and lists it on the contents
+page. The fields below are what it uses.
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&amp;family=Kalam:wght@300;400;700&amp;display=swap">
-
-  <link data-trunk rel="css" href="assets/css/base.css">
-  <link data-trunk rel="css" href="assets/css/notebook.css">
-  <link data-trunk rel="copy-file" href="assets/telescope.svg">
-  <!-- Handwriting font test scaffolding; see /hand-preview.html. Remove both
-       lines once the font question is settled. -->
-  <link data-trunk rel="copy-file" href="assets/hand-preview.html">
-  <link data-trunk rel="copy-dir" href="assets/fonts">
-  <link data-trunk rel="rust" data-wasm-opt="z">
-</head>
-<body>
-
-  <!-- Temporary: switch the body text between Kalam and the scanned hand.
-       Remove with the rest of the font-test scaffolding. -->
-  <input type="checkbox" id="hw-toggle" class="hw-toggle" checked>
-  <label for="hw-toggle" class="hw-label"></label>
-
-  <!-- ─── The sky we are observing from ───────────────────────────────── -->
-  <div class="sky-stage">
-    <section class="hero">
-      <!-- Animated starfield, rendered by src/starfield.rs. -->
-      <canvas class="sky" data-orrery="starfield" aria-hidden="true"></canvas>
-
-      <div class="hero-plate">
-        <h1 class="hero-title">Astronomical Observations</h1>
-        <p class="hero-sub">Field Notes from the Eyepiece</p>
-      </div>
-
-      <div class="hero-fade" aria-hidden="true"></div>
-    </section>
-
-    <!-- Sits above the sky, below the notebook: the lower third is covered
-         by the parchment, which is what puts it "behind the page". -->
-    <img class="telescope" src="telescope.svg" alt="" aria-hidden="true">
-  </div>
-
-  <!-- ─── The notebook ────────────────────────────────────────────────── -->
-  <main class="notebook">
-    <div class="notebook-edge" aria-hidden="true">
-      <svg viewBox="0 0 100 10" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="parchment-top" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#b8954a"/>
-            <stop offset="100%" stop-color="#d4b87a"/>
-          </linearGradient>
-        </defs>
-        <path d="M0 0 L2 3 L5 1 L9 4 L14 1.5 L18 4 L23 2 L28 5 L33 1 L38 3.5 L42 1 L47 4
-                 L52 2 L57 5 L61 1.5 L66 4 L70 2 L75 5 L79 1 L84 3.5 L88 2 L93 4 L97 1.5
-                 L100 3 L100 10 L0 10 Z" fill="url(#parchment-top)"/>
-      </svg>
-    </div>
-
-    <!-- Shared <defs> for every sketch on the page. Keeping the filter in one
-         place avoids duplicate ids once there is more than one drawing. -->
-    <svg class="sketch-defs" aria-hidden="true" focusable="false">
-      <defs>
-        <!-- Pushes strokes around by a little noise, so ruled geometry comes
-             out looking drawn by hand. -->
-        <filter id="ink" x="-15%" y="-15%" width="130%" height="130%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.028"
-                        numOctaves="3" seed="11" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4"
-                             xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-      </defs>
-    </svg>
-
-    <div class="page">
-      <p class="page-meta">Observationes Astronomicae &middot; Anno Domini MDCXI</p>
-
-      <article class="entry">
-        <div class="entry-date"><span>Entry I</span><span>2026</span></div>
-
-        <h2 class="entry-title">Kepler's Mapping of Earth's Orbit</h2>
-
-        <div class="prose">
+title: Kepler's Mapping of Earth's Orbit
+description: Mapping the orbit of the Earth, the way Kepler did — field notes from the eyepiece.
+number: 1
+date: 2026
+-->
 
           <p>
             It is tempting to look at the Martian data to try to track and map the orbit of Mars. This falls apart fast. We're trying to track a moving object while we're standing on a moving object ourselves. Your gut might tell you that this is impossible. But, both planets are doing the same cyclical motion over and over, so if you wait long enough, the sky repeats itself. The question now is given what we can observe, how can we use that to get the orbit of the big floating rock in space that we're standing on? The answer comes down to the synodic period of the Earth and Mars. What is the synodic period? This is the interval between two line-ups of the orbits of the Earth and Mars. We take a straight line from the Sun to the Earth and wait for Mars to intersect that line in opposition (going Sun, then Earth, then Mars). In practice, this looks like keeping track of when Mars is highest in the sky at midnight. Then we wait for that to happen again. The time it takes between those two events is our synodic period. That is how long it takes for the Earth to "lap" Mars once. Given that we know the orbital period of the Earth, we can use that to calculate the orbital period of Mars. Kepler's predecessors had this already figured out. This was worked out by Copernicus. Kepler got this one for free. Knowing how long Mars takes to revolve around the Sun turns it into an anchor point for us. Once we know how many days Mars takes to complete an orbit, we can look at any day, go back or forth that many days and know that Mars is in the same spot around the Sun. Do this enough times, and you can eventually trace out the orbit that the Earth takes around the Sun.
@@ -106,8 +28,7 @@
           </p>
 
           <figure class="plate" id="fig-2" data-reveal>
-            <!-- Placeholder from tools/figures/fig2_placeholder.py, to draw the
-                 real figure from. Replace with the hand-drawn version. -->
+            <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig2.svg"></div>
             <figcaption><span class="plate-num">fig. 2</span> Sun&ndash;Mars angular separation over time, with the detected oppositions marked. Sketch, not to scale.</figcaption>
           </figure>
@@ -191,7 +112,6 @@
             We find that the mathematical model of a circle that best fits our data has a center of <span class="gap">centre goes here</span> with a radius more closely resembling 0.9965 AU.
           </p>
 
-          <!-- The one real drawing on the page. -->
           <figure class="plate" id="fig-6" data-reveal>
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig6.svg"></div>
@@ -201,15 +121,3 @@
           <p>
             We have now calculated the orbit of the Earth using just a couple numbers in a spreadsheet. This means that we can place the Earth in an exact spot for any date in our dataset. In the next post we will use this to calculate the orbit of Mars.
           </p>
-
-        </div>
-
-        <p class="entry-mark">&mdash; obs. confirmed &#10003;</p>
-      </article>
-
-      <p class="finis">&#10022; &nbsp; finis &nbsp; &#10022;</p>
-    </div>
-  </main>
-
-</body>
-</html>

@@ -1,8 +1,8 @@
 [package]
-name = "orrery"
+name = "astronomy-site"
 version = "0.1.0"
 edition = "2021"
-description = "WebAssembly rendering + interaction layer for the astronomy blog"
+description = "Shared browser code for every page of the astronomy blog: starfield, reveals, figure links"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -37,9 +37,3 @@ features = [
   "ScrollIntoViewOptions",
   "ScrollLogicalPosition",
 ]
-
-[profile.release]
-opt-level = "z"
-lto = true
-codegen-units = 1
-panic = "abort"

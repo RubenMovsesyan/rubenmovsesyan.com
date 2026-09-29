@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = [
+  # Everything every page of the astronomy blog runs in the browser.
+  "crates/astronomy-site",
+  # Build-time: fills layout.html with each page in pages/ (trunk post_build hook).
+  "crates/astronomy-pages",
+]
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"

@@ -1,0 +1,9 @@
+[package]
+name = "astronomy-pages"
+version = "0.1.0"
+edition = "2021"
+description = "Builds the astronomy blog's pages: layout.html filled with each page in pages/"
+publish = false
+
+# Standard library only.
+[dependencies]

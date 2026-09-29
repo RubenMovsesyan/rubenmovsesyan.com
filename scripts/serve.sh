@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Dev server: builds the wasm, serves the site, and live-reloads the browser
-# on any change to index.html, assets/ or src/.
+# on any change to layout.html, pages/, assets/ or crates/.
 #
 #   ./scripts/serve.sh            # http://127.0.0.1:8080
 #   ./scripts/serve.sh 3000       # pick another port

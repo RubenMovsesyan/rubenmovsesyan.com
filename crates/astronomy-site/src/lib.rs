@@ -1,8 +1,10 @@
-//! WebAssembly layer for the astronomy blog.
+//! Shared browser code for the astronomy blog. Every page loads this one
+//! bundle -- the contents page and each entry alike -- since they all share
+//! layout.html, so anything a page does in the browser lives here.
 //!
 //! The HTML and CSS own layout, typography and every animation that CSS can
-//! express on its own. This crate only takes over where a canvas is needed:
-//! rendering that has to be computed frame by frame.
+//! express on its own. This crate takes over where they can't: the canvas
+//! starfield, scroll-triggered reveals, and centring figure references.
 //!
 //! Wiring contract: any element in the page that carries `data-orrery="<name>"`
 //! is handed to the renderer registered under `<name>` at startup.
@@ -42,7 +44,7 @@ fn mount_all(document: &Document) -> Result<(), JsValue> {
         match name.as_str() {
             "starfield" => starfield::mount(canvas)?,
             other => web_sys::console::warn_1(
-                &format!("orrery: no renderer registered for \"{other}\"").into(),
+                &format!("astronomy-site: no renderer registered for \"{other}\"").into(),
             ),
         }
     }

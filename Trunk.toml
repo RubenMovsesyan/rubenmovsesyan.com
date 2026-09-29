@@ -1,5 +1,8 @@
 [build]
-target = "index.html"
+# Trunk builds one HTML file per run: the shell every page shares. The
+# post_build hook below turns it into the real pages (see layout.html).
+target = "layout.html"
+html_output = "_layout.html"
 dist = "dist"
 
 [serve]
@@ -13,8 +16,9 @@ open = false
 # page to reload on each one.
 [watch]
 watch = [
-  "index.html",
-  "src",
+  "layout.html",
+  "pages",
+  "crates",
   "assets/css",
   "assets/fonts",
   "assets/figures",
@@ -31,4 +35,12 @@ ignore = ["dist", "target", "tools", "scripts"]
 [[hooks]]
 stage = "pre_build"
 command = "sh"
-command_arguments = ["-c", "echo '[trunk] building orrery wasm…'"]
+command_arguments = ["-c", "echo '[trunk] building astronomy-site wasm…'"]
+
+# Writes index.html (the contents) and entries/<slug>/index.html from
+# _layout.html and pages/, then removes _layout.html. Standard library only,
+# so after the first run it builds in a moment.
+[[hooks]]
+stage = "post_build"
+command = "cargo"
+command_arguments = ["run", "--quiet", "--package", "astronomy-pages"]
