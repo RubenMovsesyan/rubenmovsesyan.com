@@ -95,6 +95,12 @@ def cmd_trace(args):
         keep = np.zeros_like(ink)
         keep[y0:y1, x0:x1] = True
         ink &= keep
+    # Drops strokes thinner than 2 * --open pixels -- faint guide lines that
+    # only half survive the threshold -- and keeps dots and solid marks.
+    if args.open:
+        r = args.open
+        yy, xx = np.mgrid[-r:r + 1, -r:r + 1]
+        ink = ndimage.binary_opening(ink, structure=xx * xx + yy * yy <= r * r)
     if not ink.any():
         raise SystemExit("no ink found; try a higher --threshold")
 
@@ -638,6 +644,8 @@ def main():
     t.add_argument("--margin", type=int, default=30, help="pixels kept around the ink")
     t.add_argument("--region", default=None,
                    help="x0,y0,x1,y1 in photo pixels (after EXIF rotation): only ink inside is used")
+    t.add_argument("--open", type=int, default=0,
+                   help="erase strokes thinner than twice this many pixels (0 keeps all)")
     t.add_argument("--join", type=int, default=30,
                    help="ink this close is one drawing; the largest drawing is kept (0 keeps all)")
     t.set_defaults(func=cmd_trace)
