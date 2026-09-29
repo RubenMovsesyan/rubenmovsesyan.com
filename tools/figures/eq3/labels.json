@@ -1,0 +1,18 @@
+[
+ {
+  "kind": "copy",
+  "text": "$$x^2 + y^2 = k_1 x + k_2 y + k_3, \\quad k_1 = 2x_c, \\quad k_2 = 2y_c, \\quad k_3 = R^2 - x_c^2 - y_c^2$$",
+  "x": 30,
+  "y": 30,
+  "w": 1858,
+  "h": 164
+ },
+ {
+  "kind": "copy",
+  "text": "$$A = \\begin{bmatrix} x_1 & y_1 & 1 \\\\ x_2 & y_2 & 1 \\\\ x_3 & y_3 & 1 \\end{bmatrix}, \\quad B = \\begin{bmatrix} x_1^2 + y_1^2 \\\\ x_2^2 + y_2^2 \\\\ x_3^2 + y_3^2 \\end{bmatrix}, \\quad k = A^{-1} B$$",
+  "x": 325,
+  "y": 335,
+  "w": 1391,
+  "h": 362
+ }
+]

@@ -136,7 +136,8 @@
           </p>
 
           <figure class="plate" id="fig-3" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig3.svg"></div>
             <figcaption><span class="plate-num">fig. 3</span> Two sightings, one fixed target: triangulating Mars from two dates a whole number of Mars years apart.</figcaption>
           </figure>
 
@@ -145,22 +146,19 @@
           </p>
 
           <figure class="plate" id="fig-4" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
+            <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig4.svg"></div>
             <figcaption><span class="plate-num">fig. 4</span> Mars triangulation: every one of the 21 aligned dates used as a baseline.</figcaption>
           </figure>
 
-          <figure class="plate" id="fig-5" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 5</span> Distribution of the 21 per-baseline Mars&ndash;Sun distance estimates &mdash; why the median, not the mean.</figcaption>
-          </figure>
-
           <p>
-            We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-6">fig. 6</a>.
+            We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-5">fig. 5</a>.
           </p>
 
-          <figure class="plate" id="fig-6" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 6</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
+          <figure class="plate" id="fig-5" data-reveal>
+            <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig5.svg"></div>
+            <figcaption><span class="plate-num">fig. 5</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
           </figure>
 
           <p>
@@ -168,7 +166,9 @@
           </p>
 
           <figure class="plate plate--math" id="eq-2" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <!-- Built by tools/figures/figure.py; copies as LaTeX (eq2/labels.json). -->
+            <!-- Sized to eq. 1's scale (828 of its 2304 px), so the handwriting matches. -->
+            <div class="plate-art" style="width: 35.9%; margin-inline: auto"><link data-trunk rel="inline" href="assets/figures/eq2.svg"></div>
             <figcaption><span class="plate-num">eq. 2</span> The off-center circle.</figcaption>
           </figure>
 
@@ -177,7 +177,9 @@
           </p>
 
           <figure class="plate plate--math" id="eq-3" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">equation goes here</span></div>
+            <!-- Built by tools/figures/figure.py; copies as LaTeX (eq3/labels.json). -->
+            <!-- Sized to eq. 1's scale (1943 of its 2304 px), so the handwriting matches. -->
+            <div class="plate-art" style="width: 84.3%; margin-inline: auto"><link data-trunk rel="inline" href="assets/figures/eq3.svg"></div>
             <figcaption><span class="plate-num">eq. 3</span> Three points, three equations &mdash; the linear algebra simplification.</figcaption>
           </figure>
 
@@ -185,57 +187,15 @@
             We can (in theory) choose any three points on our circle to figure out our equation. In practice this doesn't work out so well. Choosing three points that are close to each other might give us the garbage result of a straight line since our measurements, no matter how precise our instruments get, are never perfect. So of all 21 days in our date set, we are going to choose days that are outside of some threshold of separation from each other. As we did before, taking just a single set of datapoints doesn't get us a good answer. So we will use every combination, in our constraints, of three points to get to a more accurate estimate of the actual equation of our fitted circle.
           </p>
 
-          <figure class="plate" id="fig-7" data-reveal>
-            <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
-            <figcaption><span class="plate-num">fig. 7</span> Every 3-point combination out of the 21-date set, against the mean and the median.</figcaption>
-          </figure>
-
           <p>
             We find that the mathematical model of a circle that best fits our data has a center of <span class="gap">centre goes here</span> with a radius more closely resembling 0.9965 AU.
           </p>
 
           <!-- The one real drawing on the page. -->
-          <figure class="sketch" id="fig-8" data-reveal>
-            <svg viewBox="0 0 200 172" fill="none"
-                 stroke-linecap="round" stroke-linejoin="round"
-                 role="img" aria-label="The Earth's orbit drawn as a circle centred away from the Sun.">
-              <g filter="url(#ink)" stroke="currentColor">
-                <!-- Orbit: two passes, the second overshooting the start the
-                     way a compass-less hand does. -->
-                <path d="M 38 88 A 62 62 0 0 1 162 88 A 62 62 0 0 1 40 90" stroke-width="1.5"/>
-                <path d="M 42 82 A 60 60 0 0 1 158 93" stroke-width="1" opacity="0.35"/>
-
-                <!-- Centre of the circle, which is not the Sun. -->
-                <path d="M 96 88 L 104 88 M 100 84 L 100 92" stroke-width="0.9" opacity="0.55"/>
-
-                <!-- Sun at the focus, offset from that centre. -->
-                <circle cx="112" cy="94" r="4.5" fill="currentColor" stroke="none"/>
-                <path d="M 112 84 L 112 80 M 112 108 L 112 112
-                         M 102 94 L 98 94 M 122 94 L 126 94
-                         M 105 87 L 102 84 M 119 101 L 122 104
-                         M 119 87 L 122 84 M 105 101 L 102 104"
-                      stroke-width="0.9" opacity="0.7"/>
-
-                <!-- The offset itself, called out. -->
-                <path d="M 100 88 L 112 94" stroke-width="0.9" stroke-dasharray="2 2" opacity="0.75"/>
-
-                <!-- Radius out to the Earth, measured from the centre. -->
-                <path d="M 100 88 L 147 48" stroke-width="1.1" opacity="0.8"/>
-                <circle cx="147" cy="48" r="3.6" fill="currentColor" stroke="none"/>
-
-                <!-- Direction of travel. -->
-                <path d="M 54 56 A 62 62 0 0 1 72 40" stroke-width="1" opacity="0.6"/>
-                <path d="M 66 41 L 72 40 L 70 46" stroke-width="1" opacity="0.6"/>
-              </g>
-
-              <g fill="currentColor" font-family="'Caveat', cursive">
-                <text x="120" y="108" font-size="10" opacity="0.72">&#9737; Sol</text>
-                <text x="152" y="42"  font-size="10" opacity="0.72">&#8853; Terra</text>
-                <text x="60"  y="92"  font-size="9"  opacity="0.5">centrum</text>
-                <text x="112" y="62"  font-size="9"  opacity="0.6">r &#8776; 0.9965 AU</text>
-              </g>
-            </svg>
-            <figcaption><span class="plate-num">fig. 8</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>
+          <figure class="plate" id="fig-6" data-reveal>
+            <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
+            <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig6.svg"></div>
+            <figcaption><span class="plate-num">fig. 6</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>
           </figure>
 
           <p>
