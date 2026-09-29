@@ -12,7 +12,7 @@ Everything a figure needs is kept in tools/figures/<name>/: drawing.svg,
 the preview.png the labeller shows (same pixel grid as the SVG), meta.json,
 and labels.json, which is hand work -- commit it.
 
-`render` writes assets/figures/<name>.svg, which index.html inlines. Labels
+`render` writes assets/figures/<name>.svg, which a page in pages/ inlines. Labels
 are real <text>, not outlines: inlined, they pick up the page's own font
 stack (the scanned hand, falling back to Kalam for digits and punctuation)
 and its `calt` alternates, which a path export would freeze.
@@ -87,7 +87,7 @@ def cmd_trace(args):
     d = fig_dir(args.name)
     d.mkdir(parents=True, exist_ok=True)
 
-    flat, paper = load_ink(args.photo, args.rotate)
+    flat, paper = load_ink(args.photo, args.rotate, args.paper)
     ink = despeckle((flat < args.threshold) & paper, args.min_area)
     # A sheet can hold more than one drawing; --region picks one out.
     if args.region:
@@ -102,7 +102,8 @@ def cmd_trace(args):
         yy, xx = np.mgrid[-r:r + 1, -r:r + 1]
         ink = ndimage.binary_opening(ink, structure=xx * xx + yy * yy <= r * r)
     if not ink.any():
-        raise SystemExit("no ink found; try a higher --threshold")
+        raise SystemExit("no ink found in the region. Low on a shadowed sheet, the page isn't "
+                         "being counted as paper: try --paper 25. Otherwise try a higher --threshold.")
 
     # Grain and shadow along the page edge survive the threshold. The drawing
     # is one cluster -- its dashes sit within a few pen widths of each other --
@@ -135,8 +136,9 @@ def cmd_trace(args):
     (d / "drawing.svg").write_text(svg)
     Image.fromarray(np.where(mask, 0, 255).astype(np.uint8)).save(d / "preview.png")
 
+    photo = pathlib.Path(args.photo).resolve()
     meta = {
-        "photo": str(pathlib.Path(args.photo).resolve().relative_to(WEBSITE)),
+        "photo": str(photo.relative_to(WEBSITE) if photo.is_relative_to(WEBSITE) else photo),
         "crop": [int(x0), int(y0), int(x1), int(y1)],
         "width": w,
         "height": h,
@@ -642,6 +644,9 @@ def main():
                    help="ink is darker than this fraction of the local paper")
     t.add_argument("--min-area", type=int, default=40, help="drop specks smaller than this")
     t.add_argument("--margin", type=int, default=30, help="pixels kept around the ink")
+    t.add_argument("--paper", type=int, default=50,
+                   help="brightness percentile that counts as paper; lower it (25) if a drawing\n"
+                        "low on a shadowed sheet comes out cut off or missing")
     t.add_argument("--region", default=None,
                    help="x0,y0,x1,y1 in photo pixels (after EXIF rotation): only ink inside is used")
     t.add_argument("--open", type=int, default=0,

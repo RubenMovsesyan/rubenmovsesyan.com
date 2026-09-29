@@ -60,8 +60,11 @@ def find_paper(gray, percentile=50, inset=20):
     return solid
 
 
-def load_ink(path, rotate):
-    """Return the flattened image and the mask of where the paper is."""
+def load_ink(path, rotate, paper_percentile=50):
+    """Return the flattened image and the mask of where the paper is.
+
+    Lower `paper_percentile` when the far end of a sheet is in shadow: at 50
+    a darker bottom third of the page is not counted as paper at all."""
     im = Image.open(path)
     # Phone photos carry their rotation in EXIF; apply it before anything else.
     im = ImageOps.exif_transpose(im)
@@ -69,7 +72,7 @@ def load_ink(path, rotate):
         im = im.rotate(rotate, expand=True)
     gray = im.convert("L")
 
-    paper = find_paper(gray)
+    paper = find_paper(gray, percentile=paper_percentile)
 
     # An uneven lighting gradient across the page would defeat a single global
     # threshold. Dividing by a heavily blurred copy of itself flattens it.
