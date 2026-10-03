@@ -9,6 +9,14 @@ number: 1
 date: 2026
 -->
 
+          <h3>Preface</h3>
+
+          <p>
+            In this series of posts, we're going to take real astronomical data and work out the orbits of planets the way that Kepler did. We're not going to be standing outside with a telescope and looking for Mars. Instead, we'll use a dataset that is already available to us. While astronomers before Kepler spent many, many years gathering all sorts of astronomical data and Kepler himself spent years running calculations to perform his experiment, we'll be using modern data and modern tools to do this in an afternoon. Of course, that's not counting the decades of data collection done by astronomers of the modern day.
+          </p>
+
+          <h3>Running Kepler's Experiment Pt.1</h3>
+
           <p>
             It is tempting to look at the Martian data to try to track and map the orbit of Mars. This falls apart fast. We're trying to track a moving object while we're standing on a moving object ourselves. Your gut might tell you that this is impossible. But, both planets are doing the same cyclical motion over and over, so if you wait long enough, the sky repeats itself. The question now is given what we can observe, how can we use that to get the orbit of the big floating rock in space that we're standing on? The answer comes down to the synodic period of the Earth and Mars. What is the synodic period? This is the interval between two line-ups of the orbits of the Earth and Mars. We take a straight line from the Sun to the Earth and wait for Mars to intersect that line in opposition (going Sun, then Earth, then Mars). In practice, this looks like keeping track of when Mars is highest in the sky at midnight. Then we wait for that to happen again. The time it takes between those two events is our synodic period. That is how long it takes for the Earth to "lap" Mars once. Given that we know the orbital period of the Earth, we can use that to calculate the orbital period of Mars. Kepler's predecessors had this already figured out. This was worked out by Copernicus. Kepler got this one for free. Knowing how long Mars takes to revolve around the Sun turns it into an anchor point for us. Once we know how many days Mars takes to complete an orbit, we can look at any day, go back or forth that many days and know that Mars is in the same spot around the Sun. Do this enough times, and you can eventually trace out the orbit that the Earth takes around the Sun.
           </p>
@@ -105,7 +113,7 @@ date: 2026
           </figure>
 
           <p>
-            We can (in theory) choose any three points on our circle to figure out our equation. In practice this doesn't work out so well. Choosing three points that are close to each other might give us the garbage result of a straight line since our measurements, no matter how precise our instruments get, are never perfect. So of all 21 days in our date set, we are going to choose days that are outside of some threshold of separation from each other. As we did before, taking just a single set of datapoints doesn't get us a good answer. So we will use every combination, in our constraints, of three points to get to a more accurate estimate of the actual equation of our fitted circle.
+            We can (in theory) choose any three points on our circle to figure out our equation. In practice this doesn't work out so well. Choosing three points that are close to each other might give us the garbage result of a straight line since our measurements, no matter how precise our instruments get, are never perfect. So of all 21 days in our date set, we are going to choose days that are outside of some threshold of separation from each other. As we did before, taking just a single set of data points doesn't get us a good answer. So we will use every combination, in our constraints, of three points to get to a more accurate estimate of the actual equation of our fitted circle.
           </p>
 
           <p>

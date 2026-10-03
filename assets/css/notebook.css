@@ -107,6 +107,18 @@
 }
 .prose > p:last-child { margin-bottom: 0; }
 
+/* A section heading inside an entry: written in the margin hand, smaller
+   than the entry's title, with room above to start a new part. */
+.prose > h3 {
+  margin: 2.25rem 0 0.6rem;
+  font-family: var(--display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-margin);
+}
+.prose > h3:first-child { margin-top: 0; }
+
 .entry-mark {
   margin: 0.75rem 0 0;
   text-align: right;
