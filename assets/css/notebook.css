@@ -22,8 +22,16 @@
     url("textures/torn-edge-mask.png") center top / max(100%, 1400px) var(--tear) no-repeat,
     linear-gradient(#000, #000) 0 var(--tear) / 100% 100% no-repeat;
   color: var(--ink);
+  /* The paper itself: a photo of aged paper, spanning the page's width and
+     repeating down it. Each repeat is the photo then its mirror image
+     (built by tools/paper_texture.py), so the copies join seamlessly. The
+     photo is levelled to near-white there and multiplied over the
+     parchment gradient: the page keeps its golden-brown colour, and the
+     photo adds its stains and grain. */
   background:
+    url("textures/paper-mirrored.webp") center top / 100% auto repeat-y,
     radial-gradient(ellipse at 35% 30%, var(--paper-hi) 0%, var(--paper-mid) 45%, var(--paper-lo) 100%);
+  background-blend-mode: multiply;
 }
 
 /* Fibre grain, then a burnt vignette at the edges. Both inert to pointers. */
@@ -49,8 +57,10 @@
 
 /* ── Torn top edge ─────────────────────────────────────────────────────── */
 
-/* The edge's darker colour, as before: deepest at the tear, fading into
-   the page. The notebook's mask cuts it to the tear's shape. */
+/* Grime along the torn edge: the paper texture runs into the tear, and
+   this darkens it there (multiply), deepest at the edge and fading into
+   the page, as if the edge has been handled. The notebook's mask cuts it
+   to the tear's shape. */
 .notebook-edge {
   position: absolute;
   top: 0;
@@ -58,7 +68,8 @@
   right: 0;
   height: calc(var(--tear) + 28px);
   pointer-events: none;
-  background: linear-gradient(180deg, #b8954a 0%, rgba(212, 184, 122, 0) 100%);
+  background: linear-gradient(180deg, rgba(150, 112, 62, 0.65) 0%, rgba(150, 112, 62, 0) 100%);
+  mix-blend-mode: multiply;
 }
 
 /* ── The written column ────────────────────────────────────────────────── */
