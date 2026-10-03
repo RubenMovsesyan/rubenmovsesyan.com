@@ -152,10 +152,14 @@ canvas, svg, img { display: block; }
 
 .telescope {
   position: absolute;
-  bottom: -70px;
+  /* The render crops the lower tripod itself (FRAME_ABOVE in
+     telescope.rs), so the canvas only dips behind the torn edge. */
+  bottom: -12px;
   right: 21%;
   z-index: 5;
   width: clamp(8rem, 14vw, 13rem);
+  /* The old drawing's proportions (240 x 285), so the spot is unchanged. */
+  aspect-ratio: 240 / 285;
   height: auto;
   pointer-events: none;
   filter: drop-shadow(0 6px 32px rgba(40, 80, 200, 0.28));

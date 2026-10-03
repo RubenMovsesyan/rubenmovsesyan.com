@@ -9,6 +9,14 @@ use crate::canvas::{animate, Rng, Surface};
 const STAR_COUNT: usize = 340;
 /// Stars at or above this depth get the three-layer halo treatment.
 const BRIGHT_DEPTH: f64 = 0.93;
+/// Parallax layers for a turn around the telescope (orbit.rs). A star in
+/// layer n slides n sky widths per full turn: the farthest layer 1, the
+/// nearest PARALLAX_LAYERS. Whole widths, so after a full turn every star is
+/// back where it started and the sky loops.
+const PARALLAX_LAYERS: f64 = 3.0;
+/// The sky's frame rate when nothing is turning: its drift and twinkle are
+/// slow enough that this looks the same as 60 fps at a third of the work.
+const IDLE_FPS: f64 = 20.0;
 
 struct Star {
     /// Position in normalised [0,1) space so a resize never reshuffles stars.
@@ -17,6 +25,9 @@ struct Star {
     radius: f64,
     /// Farther stars drift slower, which reads as depth.
     depth: f64,
+    /// Sky widths it slides per full turn around the telescope: a whole
+    /// number, 1 (farthest) to PARALLAX_LAYERS (nearest).
+    layer: f64,
     phase: f64,
     twinkle_hz: f64,
     /// Faint colour cast — stars are not all the same white.
@@ -45,6 +56,7 @@ pub fn mount(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
                 y: rng.next_f64(),
                 radius: 0.35 + depth * 1.1,
                 depth,
+                layer: (depth * PARALLAX_LAYERS).ceil().clamp(1.0, PARALLAX_LAYERS),
                 phase: rng.range(0.0, std::f64::consts::TAU),
                 twinkle_hz: rng.range(0.05, 0.35),
                 tint,
@@ -52,7 +64,8 @@ pub fn mount(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
         })
         .collect();
 
-    animate(move |t| {
+    let element = surface.canvas.clone();
+    animate(&element, IDLE_FPS, crate::orbit::is_turning, move |t| {
         let _ = surface.resize();
         surface.clear();
 
@@ -60,8 +73,10 @@ pub fn mount(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
         let ctx = &surface.ctx;
 
         for star in &stars {
-            // Drift right and wrap; depth sets the rate.
-            let x = ((star.x + t * 0.0035 * star.depth) % 1.0) * w;
+            // Drift right and wrap; depth sets the rate. A turn around the
+            // telescope slides the sky too, nearer layers further: parallax.
+            let turns = crate::orbit::angle() / std::f64::consts::TAU;
+            let x = (star.x + t * 0.0035 * star.depth + turns * star.layer).rem_euclid(1.0) * w;
             let y = star.y * h;
 
             let twinkle = (t * star.twinkle_hz * std::f64::consts::TAU + star.phase).sin();

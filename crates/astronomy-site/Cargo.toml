@@ -2,15 +2,23 @@
 name = "astronomy-site"
 version = "0.1.0"
 edition = "2021"
-description = "Shared browser code for every page of the astronomy blog: starfield, reveals, figure links"
+description = "Shared browser code for every page of the astronomy blog: starfield, 3D telescope, reveals, figure links"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
 console_error_panic_hook = "0.1"
+# The 3D telescope: WebGPU where the browser has it, WebGL2 otherwise
+# (wgpu picks at runtime). Only the browser backends are compiled in.
+wgpu = { version = "30", default-features = false, features = ["webgpu", "webgl", "wgsl"] }
+# Reads the telescope model; no file or image loading, it is compiled in.
+gltf = { version = "1.4", default-features = false, features = ["utils"] }
+glam = "0.33"
+bytemuck = { version = "1", features = ["derive"] }
 
 [dependencies.web-sys]
 version = "0.3"
@@ -36,4 +44,7 @@ features = [
   "Location",
   "ScrollIntoViewOptions",
   "ScrollLogicalPosition",
+  "ResizeObserver",
+  "WheelEvent",
+  "AddEventListenerOptions",
 ]

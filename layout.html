@@ -17,7 +17,6 @@
 
   <link data-trunk rel="css" href="assets/css/base.css">
   <link data-trunk rel="css" href="assets/css/notebook.css">
-  <link data-trunk rel="copy-file" href="assets/telescope.svg">
   <!-- Handwriting font test scaffolding; see /hand-preview.html. Remove both
        lines once the font question is settled. -->
   <link data-trunk rel="copy-file" href="assets/hand-preview.html">
@@ -46,8 +45,10 @@
     </section>
 
     <!-- Sits above the sky, below the notebook: the lower third is covered
-         by the parchment, which is what puts it "behind the page". -->
-    <img class="telescope" src="/telescope.svg" alt="" aria-hidden="true">
+         by the parchment, which is what puts it "behind the page". Drawn in
+         3D from assets/models/telescope.glb by
+         crates/astronomy-site/src/telescope.rs (WebGPU, or WebGL2). -->
+    <canvas class="telescope" data-orrery="telescope" aria-hidden="true"></canvas>
   </div>
 
   <!-- ─── The notebook ────────────────────────────────────────────────── -->

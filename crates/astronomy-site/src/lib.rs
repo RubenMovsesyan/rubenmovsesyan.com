@@ -15,8 +15,10 @@ use web_sys::{Document, HtmlCanvasElement, Window};
 
 mod canvas;
 mod figref;
+mod orbit;
 mod reveal;
 mod starfield;
+mod telescope;
 
 /// Entry point. Trunk emits the glue that calls this once the module loads.
 #[wasm_bindgen(start)]
@@ -28,6 +30,7 @@ pub fn start() -> Result<(), JsValue> {
 
     mount_all(&document)?;
     reveal::mount(&document)?;
+    orbit::mount(&document)?;
     figref::mount(&document)?;
     Ok(())
 }
@@ -43,6 +46,7 @@ fn mount_all(document: &Document) -> Result<(), JsValue> {
 
         match name.as_str() {
             "starfield" => starfield::mount(canvas)?,
+            "telescope" => telescope::mount(canvas)?,
             other => web_sys::console::warn_1(
                 &format!("astronomy-site: no renderer registered for \"{other}\"").into(),
             ),
