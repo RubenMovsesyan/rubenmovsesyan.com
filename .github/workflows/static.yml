@@ -1,0 +1,60 @@
+# Build the astronomy blog with trunk and publish it to GitHub Pages.
+# Runs on every push to main, and by hand from the Actions tab.
+name: Deploy site to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push doesn't cancel one in progress.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Rust stable plus the wasm32 target (also asked for by rust-toolchain.toml).
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      # Reuses compiled dependencies between runs, so later builds are quick.
+      - uses: Swatinem/rust-cache@v2
+
+      # The same trunk version used locally. Trunk downloads wasm-bindgen
+      # and wasm-opt itself during the build.
+      - name: Install trunk
+        run: |
+          curl -sSL https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-gnu.tar.gz \
+            | tar -xz -C /usr/local/bin trunk
+          trunk --version
+
+      # Compiles the wasm, then the post_build hook writes every page into dist/.
+      - name: Build
+        run: ./scripts/build.sh
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
