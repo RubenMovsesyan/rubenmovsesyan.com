@@ -24,11 +24,9 @@
   --measure: 42rem;          /* the written column */
   --gutter: 2rem;
 
-  --hand: 'Kalam', 'Bradley Hand', cursive;   /* body */
-  /* The scanned hand, falling back to Kalam for every character it does not
-     yet contain -- which is all punctuation and all digits. */
+  /* The handwriting, falling back to Kalam for every character it does not
+     contain -- which is all punctuation and all digits. */
   --scan: 'Hand Scan', 'Kalam', 'Bradley Hand', cursive;
-  --display: 'Caveat', 'Snell Roundhand', cursive;  /* headings, labels */
 
   --step--2: clamp(0.72rem, 0.7rem + 0.1vw, 0.8rem);
   --step--1: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);
@@ -68,7 +66,10 @@ body {
   margin: 0;
   background: var(--night-1);
   color: var(--ink);
-  font-family: var(--hand);
+  /* Everything is in the handwriting: body, titles and labels alike.
+     calt cycles each letter's variants, so repeats aren't stamped copies. */
+  font-family: var(--scan);
+  font-feature-settings: "calt" 1;
   font-size: var(--step-0);
   line-height: 1.8;
 }
@@ -114,7 +115,7 @@ canvas, svg, img { display: block; }
 
 .hero-title {
   margin: 0;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: var(--step-4);
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -179,44 +180,3 @@ canvas, svg, img { display: block; }
   }
 }
 
-/* ── Handwriting toggle ─────────────────────────────────────────────────
-   Temporary, for judging the scanned font in place. Remove along with the
-   @font-face and the font-test scaffolding in layout.html. */
-
-.hw-toggle { position: absolute; opacity: 0; pointer-events: none; }
-
-.hw-label {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 50;
-  padding: 0.35rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  background: rgba(4, 6, 20, 0.55);
-  backdrop-filter: blur(10px);
-  color: rgba(255, 255, 255, 0.6);
-  font-family: var(--hand);
-  font-size: 0.8rem;
-  cursor: pointer;
-  user-select: none;
-  transition: color 200ms ease, border-color 200ms ease;
-}
-
-.hw-toggle:checked + .hw-label {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.hw-label::before { content: "✦ Kalam"; }
-.hw-toggle:checked + .hw-label::before { content: "✦ My handwriting"; }
-
-.hw-toggle:focus-visible + .hw-label { outline: 2px solid var(--accent-cool, #8cc8ff); outline-offset: 3px; }
-
-/* Body text swaps to the scan; the Caveat ornament is left alone. */
-body:has(.hw-toggle:checked) .prose,
-body:has(.hw-toggle:checked) .note,
-body:has(.hw-toggle:checked) .toc-desc {
-  font-family: var(--scan);
-  font-feature-settings: "calt" 1;
-}

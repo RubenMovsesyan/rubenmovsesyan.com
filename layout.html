@@ -13,22 +13,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&amp;family=Kalam:wght@300;400;700&amp;display=swap">
+        href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap">
 
   <link data-trunk rel="css" href="assets/css/base.css">
   <link data-trunk rel="css" href="assets/css/notebook.css">
-  <!-- Handwriting font test scaffolding; see /hand-preview.html. Remove both
-       lines once the font question is settled. -->
-  <link data-trunk rel="copy-file" href="assets/hand-preview.html">
+  <!-- The handwriting font, and the blank font for figures' copy text. -->
   <link data-trunk rel="copy-dir" href="assets/fonts">
+  <link data-trunk rel="copy-dir" href="assets/textures">
   <link data-trunk rel="rust" href="crates/astronomy-site/Cargo.toml" data-wasm-opt="z">
 </head>
 <body>
-
-  <!-- Temporary: switch the body text between Kalam and the scanned hand.
-       Remove with the rest of the font-test scaffolding. -->
-  <input type="checkbox" id="hw-toggle" class="hw-toggle" checked>
-  <label for="hw-toggle" class="hw-label"></label>
 
   <!-- ─── The sky we are observing from ───────────────────────────────── -->
   <div class="sky-stage">
@@ -53,19 +47,9 @@
 
   <!-- ─── The notebook ────────────────────────────────────────────────── -->
   <main class="notebook">
-    <div class="notebook-edge" aria-hidden="true">
-      <svg viewBox="0 0 100 10" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="parchment-top" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#b8954a"/>
-            <stop offset="100%" stop-color="#d4b87a"/>
-          </linearGradient>
-        </defs>
-        <path d="M0 0 L2 3 L5 1 L9 4 L14 1.5 L18 4 L23 2 L28 5 L33 1 L38 3.5 L42 1 L47 4
-                 L52 2 L57 5 L61 1.5 L66 4 L70 2 L75 5 L79 1 L84 3.5 L88 2 L93 4 L97 1.5
-                 L100 3 L100 10 L0 10 Z" fill="url(#parchment-top)"/>
-      </svg>
-    </div>
+    <!-- The torn top edge: assets/textures/torn-edge-mask.png (built by
+         tools/torn_edge.py from torn-paper.png) cut from the page colour. -->
+    <div class="notebook-edge" aria-hidden="true"></div>
 
     <!-- Shared <defs> for every sketch on the page. Keeping the filter in one
          place avoids duplicate ids once there is more than one drawing. -->
@@ -86,8 +70,6 @@
       <p class="page-meta">Observationes Astronomicae &middot; Anno Domini MDCXI</p>
 
 <!-- page:content -->
-
-      <p class="finis">&#10022; &nbsp; finis &nbsp; &#10022;</p>
     </div>
   </main>
 

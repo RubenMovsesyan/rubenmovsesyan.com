@@ -22,7 +22,7 @@ watch = [
   "assets/css",
   "assets/fonts",
   "assets/figures",
-  "assets/hand-preview.html",
+  "assets/textures",
   "assets/models",
   "Cargo.toml",
   "Cargo.lock",

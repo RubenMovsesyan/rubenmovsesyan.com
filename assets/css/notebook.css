@@ -1,9 +1,26 @@
 /* The parchment page: Kepler's notebook. */
 
 .notebook {
+  /* Height of the torn edge: the page reaches this far up over the sky.
+     The mask is squashed to it, so a low value reads as an old, worn edge
+     rather than a fresh tear. */
+  --tear: 22px;
   position: relative;
   z-index: 10;               /* crops the telescope behind it */
   min-height: 100vh;
+  margin-top: calc(-1 * var(--tear));
+  padding-top: var(--tear);
+  /* The page's top edge is torn: a mask of a real torn sheet (white =
+     paper; built by tools/torn_edge.py) for the top strip, solid below.
+     The page's own colour, grain and vignette run straight through it. At
+     least 1400px wide and centred, so a narrow screen shows the middle of
+     the tear rather than all of it squeezed. */
+  -webkit-mask:
+    url("textures/torn-edge-mask.png") center top / max(100%, 1400px) var(--tear) no-repeat,
+    linear-gradient(#000, #000) 0 var(--tear) / 100% 100% no-repeat;
+          mask:
+    url("textures/torn-edge-mask.png") center top / max(100%, 1400px) var(--tear) no-repeat,
+    linear-gradient(#000, #000) 0 var(--tear) / 100% 100% no-repeat;
   color: var(--ink);
   background:
     radial-gradient(ellipse at 35% 30%, var(--paper-hi) 0%, var(--paper-mid) 45%, var(--paper-lo) 100%);
@@ -32,20 +49,16 @@
 
 /* ── Torn top edge ─────────────────────────────────────────────────────── */
 
+/* The edge's darker colour, as before: deepest at the tear, fading into
+   the page. The notebook's mask cuts it to the tear's shape. */
 .notebook-edge {
-  position: relative;
-  height: 28px;
-  overflow: hidden;
-}
-
-.notebook-edge svg { width: 100%; height: 100%; }
-
-.notebook-edge::after {
-  content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--tear) + 28px);
   pointer-events: none;
-  box-shadow: inset 0 4px 10px rgba(100, 60, 10, 0.3);
+  background: linear-gradient(180deg, #b8954a 0%, rgba(212, 184, 122, 0) 100%);
 }
 
 /* ── The written column ────────────────────────────────────────────────── */
@@ -60,7 +73,7 @@
 
 .page-meta {
   margin: 0 0 3rem;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 1.1rem;
   letter-spacing: 0.08em;
   text-align: center;
@@ -76,11 +89,14 @@
 .entry-date {
   position: absolute;
   top: 0;
-  left: -3rem;
+  /* Anchored by its right edge, so however wide the hand writes it, it
+     grows out into the margin rather than over the title. */
+  right: calc(100% + 0.9rem);
+  white-space: nowrap;
   display: flex;
   flex-direction: column;
   text-align: right;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 0.78rem;
   line-height: 1.3;
   color: var(--ink-date);
@@ -93,7 +109,7 @@
 .entry-title {
   margin: 0 0 1rem;
   padding-bottom: 0.3rem;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: var(--step-2);
   border-bottom: 1px solid var(--ink-rule);
 }
@@ -111,7 +127,7 @@
    than the entry's title, with room above to start a new part. */
 .prose > h3 {
   margin: 2.25rem 0 0.6rem;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 1.55rem;
   font-weight: 700;
   line-height: 1.2;
@@ -122,7 +138,7 @@
 .entry-mark {
   margin: 0.75rem 0 0;
   text-align: right;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 0.8rem;
   color: var(--ink-margin);
   opacity: 0.6;
@@ -131,7 +147,7 @@
 /* Back to the contents, from an entry: a note in the corner of the page. */
 .page-nav {
   margin: -1.5rem 0 2rem;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 1.05rem;
 }
 .page-nav a {
@@ -164,7 +180,7 @@
 .toc-num,
 .toc-date {
   flex: none;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 0.95rem;
   color: var(--ink-date);
 }
@@ -172,8 +188,8 @@
 .toc-date { opacity: 0.8; }
 
 .toc-title {
-  font-family: var(--display);
-  font-size: 1.6rem;
+  font-family: var(--scan);
+  font-size: 1.35rem;
   line-height: 1.2;
   transition: color 200ms ease;
 }
@@ -200,8 +216,6 @@ figure { margin: 2.5rem 0; }
 
 figcaption {
   margin-top: 0.6rem;
-  /* The body's face, so captions follow the handwriting toggle with it. */
-  font-family: inherit;
   font-size: 0.95rem;
   line-height: 1.35;
   text-align: center;
@@ -237,7 +251,7 @@ figcaption {
 }
 
 .plate-mark {
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 1.15rem;
   letter-spacing: 0.04em;
   color: var(--ink-margin);
@@ -292,11 +306,6 @@ figcaption {
 }
 .fig-copy::selection { background: rgba(122, 74, 40, 0.25); }
 
-/* Labels are set in the scanned hand whichever body font is showing. */
-.fig-label {
-  font-family: var(--scan);
-  font-feature-settings: "calt" 1;
-}
 
 /* Figures fade in when scrolled to. `js-reveal` is set by crates/astronomy-site/src/reveal.rs, so
    if the wasm never loads they are simply visible instead of stuck hidden. */
@@ -314,7 +323,7 @@ figcaption {
 
 /* A reference to a figure, ringed the way you'd circle it on paper. */
 .figref {
-  font-family: var(--display);
+  font-family: var(--scan);
   font-size: 0.95em;
   white-space: nowrap;
   color: var(--ink-margin);
@@ -331,7 +340,7 @@ figcaption {
 
 /* A number still to be filled in: a ruled blank, as left on a worksheet. */
 .gap {
-  font-family: var(--display);
+  font-family: var(--scan);
   color: var(--ink-margin);
   opacity: 0.6;
   padding: 0 0.45em;
@@ -351,7 +360,7 @@ figcaption {
 .note-label {
   display: block;
   margin-bottom: 0.2rem;
-  font-family: var(--display);
+  font-family: var(--scan);
   font-weight: 700;
   letter-spacing: 0.04em;
   opacity: 0.8;
