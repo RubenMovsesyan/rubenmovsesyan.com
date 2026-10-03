@@ -85,7 +85,16 @@ canvas, svg, img { display: block; }
    clips its own starfield; the telescope is a sibling so it can hang below
    the hero's bottom edge and be covered by the notebook. */
 
-.sky-stage { position: relative; z-index: 0; }
+.sky-stage {
+  position: relative;
+  z-index: 0;
+  /* A sideways drag turns the view round the telescope (orbit.rs); an
+     up/down swipe still scrolls the page. */
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+.sky-stage.is-dragging { cursor: grabbing; }
 
 .hero {
   position: relative;
