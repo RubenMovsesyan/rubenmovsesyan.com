@@ -94,7 +94,7 @@ SVG, coded sketch) and keeps the caption. If the page has no slot for it yet,
 add a placeholder where the figure belongs:
 
 ```html
-          <figure class="plate" id="fig-9" data-reveal>
+          <figure class="plate" id="fig-9">
             <div class="plate-frame"><span class="plate-mark">visual goes here</span></div>
             <figcaption><span class="plate-num">fig. 9</span> Caption.</figcaption>
           </figure>

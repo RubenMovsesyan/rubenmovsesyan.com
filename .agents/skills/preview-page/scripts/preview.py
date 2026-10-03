@@ -14,9 +14,9 @@ on a free port, and drives headless Chromium:
                a figure) and prints what a reader copying it would get --
                the LaTeX of an equation, for one
 
-Fade-ins and the telescope's entrance are switched off first, so a figure is
-never caught half-faded. Headless Chromium doesn't animate smooth scrolling,
-so nothing here depends on it.
+The telescope's entrance animation is switched off first, so it is never
+caught mid-slide. Headless Chromium doesn't animate smooth scrolling, so
+nothing here depends on it.
 
 Standard library only; needs trunk and chromium (or google-chrome).
 """
@@ -37,7 +37,7 @@ WEBSITE = pathlib.Path(__file__).resolve().parents[4]
 
 STILL = """<style>
   html { scroll-behavior: auto !important; }
-  [data-reveal], .telescope { opacity: 1 !important; transform: none !important;
+  .telescope { opacity: 1 !important; transform: none !important;
                               transition: none !important; animation: none !important; }
 </style>"""
 

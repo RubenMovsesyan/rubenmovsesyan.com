@@ -6,7 +6,7 @@
 Replaces whatever art the <figure id="..."> holds now -- the "visual goes
 here" placeholder, an earlier traced SVG, a hand-coded sketch -- with the
 inline link to assets/figures/<name>.svg, and keeps its caption. The figure
-element itself (id, classes, data-reveal) is left as it is.
+element itself (id, classes) is left as it is.
 
 --scale-like shows it at another figure's scale instead of the full column:
 equations are traced at the pen's own size, so a short one stretched to the

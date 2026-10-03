@@ -9,7 +9,26 @@ use wasm_bindgen::JsCast;
 use web_sys::{Document, Element, Event, ScrollIntoViewOptions, ScrollLogicalPosition};
 
 pub fn mount(document: &Document) -> Result<(), JsValue> {
-    let links = document.query_selector_all("a.figref[href^='#']")?;
+    if let Some(root) = document.document_element() {
+        attach_in(&root)?;
+    }
+
+    // A page opened at #eq-1 has already been jumped to the top of it by the
+    // browser; move it to the middle to match.
+    let hash = crate::window().location().hash().unwrap_or_default();
+    if hash.len() > 1 {
+        if let Some(target) = document.get_element_by_id(&hash[1..]) {
+            centre(&target);
+        }
+    }
+    Ok(())
+}
+
+/// Make the figure references under `root` centre their target; also for
+/// pages swapped in later (navigate.rs).
+pub fn attach_in(root: &Element) -> Result<(), JsValue> {
+    let document = crate::window().document().ok_or("no document")?;
+    let links = root.query_selector_all("a.figref[href^='#']")?;
     for i in 0..links.length() {
         let Some(node) = links.item(i) else { continue };
         let link: Element = node.dyn_into()?;
@@ -29,19 +48,10 @@ pub fn mount(document: &Document) -> Result<(), JsValue> {
         // Lives as long as the page.
         onclick.forget();
     }
-
-    // A page opened at #eq-1 has already been jumped to the top of it by the
-    // browser; move it to the middle to match.
-    let hash = crate::window().location().hash().unwrap_or_default();
-    if hash.len() > 1 {
-        if let Some(target) = document.get_element_by_id(&hash[1..]) {
-            centre(&target);
-        }
-    }
     Ok(())
 }
 
-fn centre(target: &Element) {
+pub fn centre(target: &Element) {
     // No behavior given, so the stylesheet decides: smooth, or instant under
     // prefers-reduced-motion (base.css).
     let options = ScrollIntoViewOptions::new();

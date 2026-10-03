@@ -28,8 +28,8 @@ Then **read the screenshot**. Output from the command alone isn't a check.
   running, and it rewrites `dist/` whenever a file changes. A build into
   `dist/` races it and can leave `dist/` empty. For the same reason, don't put
   test files in `dist/`.
-- **Fade-ins switched off:** figures fade in when scrolled to, which caught
-  earlier screenshots half-faded.
+- **Telescope entrance switched off:** it slides in on load, so a screenshot
+  could catch it mid-slide.
 - **Figure shots shift the page, not the scroll:** headless Chromium takes
   screenshots from the top of the page whatever a script scrolls to, and
   doesn't animate smooth scrolling. So nothing here relies on scrolling.

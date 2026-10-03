@@ -4,7 +4,8 @@
 //!
 //! The HTML and CSS own layout, typography and every animation that CSS can
 //! express on its own. This crate takes over where they can't: the canvas
-//! starfield, scroll-triggered reveals, and centring figure references.
+//! starfield, the 3D telescope, turning the view, moving between pages
+//! in place, and centring figure references.
 //!
 //! Wiring contract: any element in the page that carries `data-orrery="<name>"`
 //! is handed to the renderer registered under `<name>` at startup.
@@ -15,8 +16,8 @@ use web_sys::{Document, HtmlCanvasElement, Window};
 
 mod canvas;
 mod figref;
+mod navigate;
 mod orbit;
-mod reveal;
 mod starfield;
 mod telescope;
 
@@ -29,9 +30,9 @@ pub fn start() -> Result<(), JsValue> {
     let document = window.document().expect("document should exist");
 
     mount_all(&document)?;
-    reveal::mount(&document)?;
     orbit::mount(&document)?;
     figref::mount(&document)?;
+    navigate::mount(&document)?;
     Ok(())
 }
 

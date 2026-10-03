@@ -21,7 +21,7 @@ date: 2026
             It is tempting to look at the Martian data to try to track and map the orbit of Mars. This falls apart fast. We're trying to track a moving object while we're standing on a moving object ourselves. Your gut might tell you that this is impossible. But, both planets are doing the same cyclical motion over and over, so if you wait long enough, the sky repeats itself. The question now is given what we can observe, how can we use that to get the orbit of the big floating rock in space that we're standing on? The answer comes down to the synodic period of the Earth and Mars. What is the synodic period? This is the interval between two line-ups of the orbits of the Earth and Mars. We take a straight line from the Sun to the Earth and wait for Mars to intersect that line in opposition (going Sun, then Earth, then Mars). In practice, this looks like keeping track of when Mars is highest in the sky at midnight. Then we wait for that to happen again. The time it takes between those two events is our synodic period. That is how long it takes for the Earth to "lap" Mars once. Given that we know the orbital period of the Earth, we can use that to calculate the orbital period of Mars. Kepler's predecessors had this already figured out. This was worked out by Copernicus. Kepler got this one for free. Knowing how long Mars takes to revolve around the Sun turns it into an anchor point for us. Once we know how many days Mars takes to complete an orbit, we can look at any day, go back or forth that many days and know that Mars is in the same spot around the Sun. Do this enough times, and you can eventually trace out the orbit that the Earth takes around the Sun.
           </p>
 
-          <figure class="plate" id="fig-1" data-reveal>
+          <figure class="plate" id="fig-1">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig1.svg"></div>
             <figcaption><span class="plate-num">fig. 1</span> Two oppositions, one synodic period apart. At each, the Sun, Earth and Mars line up with Earth in the middle.</figcaption>
@@ -35,7 +35,7 @@ date: 2026
             Now, let's get to actually doing some calculations. Just for fun, let's calculate the orbital period of Mars the same way Copernicus did. He was the one who worked it out first, and the number that came out of that work, 687 days, is still the accepted value today. We will, however, use that accepted value for the purposes of our experiment rather than our own. How do we take our data and find the dates that Mars is in opposition? Since everything is measured from a fixed axis in space (at least relative to the stars), we need to look at the angular difference between where the Sun is and where Mars is. When this difference is 180 degrees, we know that Mars is in opposition. For our purposes, we will be looking at when the absolute angle difference is at its peak in the dataset. Measuring the time between events like this in our dataset we can find how many days apart this happens (Earth days that is).
           </p>
 
-          <figure class="plate" id="fig-2" data-reveal>
+          <figure class="plate" id="fig-2">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig2.svg"></div>
             <figcaption><span class="plate-num">fig. 2</span> Sun&ndash;Mars angular separation over time, with the detected oppositions marked. Sketch, not to scale.</figcaption>
@@ -45,7 +45,7 @@ date: 2026
             But this period is not constant. Through our data we actually see that the synodic period of Mars wobbles a bit. Over ten oppositions that we note, there are nine gaps, and they run from 764 to 810 days. Mars is not a metronome. We need to average out all the gaps to find that the synodic period is 784 days on average. One line of algebra later, <a class="figref" href="#eq-1">eq. 1</a>
           </p>
 
-          <figure class="plate plate--math" id="eq-1" data-reveal>
+          <figure class="plate plate--math" id="eq-1">
             <!-- Built by tools/figures/figure.py; copies as LaTeX (eq1/labels.json). -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/eq1.svg"></div>
             <figcaption><span class="plate-num">eq. 1</span> Synodic period to orbital period.</figcaption>
@@ -64,7 +64,7 @@ date: 2026
             We can use this as our period to find Mars' anchor point, but as I said before, we will use the accepted 687 day value instead. Four days sounds insignificant. Twelve orbits later it's a month and a half, and Mars isn't there anymore. I know, cheating again. So for every 687 day period, we can add those measurements to our date set that we will use to calculate the orbit of the Earth. So we go through every date in our dataset, count how many other dates sit a whole number of Mars years away from it, and keep the winner. That date is January 1, 2000. It lines up with 20 other dates, 21 including itself. Now that we have a set of dates where we know that Mars is in the same position in its orbit, we can take two dates out of that set and use the angles measured for the Sun and Mars to triangulate the anchor point of Mars <a class="figref" href="#fig-3">fig. 3</a>.
           </p>
 
-          <figure class="plate" id="fig-3" data-reveal>
+          <figure class="plate" id="fig-3">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig3.svg"></div>
             <figcaption><span class="plate-num">fig. 3</span> Two sightings, one fixed target: triangulating Mars from two dates a whole number of Mars years apart.</figcaption>
@@ -74,7 +74,7 @@ date: 2026
             Note that we are assuming that the Earth is always one astronomical unit away from the Sun (an astronomical unit (AU) is just astronomy jargon for the average distance from the Sun to the Earth). Then we do this with as many combinations of dates in this date set as we can make, and statistically filter out the outliers to get our true(er) estimate of the position of Mars in space on that periodic date.
           </p>
 
-          <figure class="plate" id="fig-4" data-reveal>
+          <figure class="plate" id="fig-4">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig4.svg"></div>
             <figcaption><span class="plate-num">fig. 4</span> Mars triangulation: every one of the 21 aligned dates used as a baseline.</figcaption>
@@ -84,7 +84,7 @@ date: 2026
             We now have Mars pinned to one spot in space. Time to flip it around. Given that we know where Mars is, let's use that to calculate the shape of the Earth's orbit. Before we were assuming that the Earth sits 1 AU away from the Sun. Now we want to get closer to the actual number by using Mars as our reference point. We still need to choose dates out of our date set of 21 dates where we know Mars is at its anchor point. For each point we can use the same triangulation method to instead calculate the position of the Earth <a class="figref" href="#fig-5">fig. 5</a>.
           </p>
 
-          <figure class="plate" id="fig-5" data-reveal>
+          <figure class="plate" id="fig-5">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig5.svg"></div>
             <figcaption><span class="plate-num">fig. 5</span> The same triangulation with the labels swapped: Earth's position for each data point.</figcaption>
@@ -94,7 +94,7 @@ date: 2026
             We are going to assume, like Kepler did, that the Earth's orbit is a perfect circle. However, we cannot assume that it is centered around the Sun. Kepler knew this from one Hipparchus, who had observed that the times between the solstices and the equinoxes are not equal. The model he decided to go with and we will as well was an off-center circle <a class="figref" href="#eq-2">eq. 2</a>.
           </p>
 
-          <figure class="plate plate--math" id="eq-2" data-reveal>
+          <figure class="plate plate--math" id="eq-2">
             <!-- Built by tools/figures/figure.py; copies as LaTeX (eq2/labels.json). -->
             <!-- Sized to eq. 1's scale (828 of its 2304 px), so the handwriting matches. -->
             <div class="plate-art" style="width: 35.9%; margin-inline: auto"><link data-trunk rel="inline" href="assets/figures/eq2.svg"></div>
@@ -105,7 +105,7 @@ date: 2026
             This matches the property where the seasons do not align. With a little bit of linear algebra magic we find that three points give us three equations to calculate our orbit <a class="figref" href="#eq-3">eq. 3</a>.
           </p>
 
-          <figure class="plate plate--math" id="eq-3" data-reveal>
+          <figure class="plate plate--math" id="eq-3">
             <!-- Built by tools/figures/figure.py; copies as LaTeX (eq3/labels.json). -->
             <!-- Sized to eq. 1's scale (1943 of its 2304 px), so the handwriting matches. -->
             <div class="plate-art" style="width: 84.3%; margin-inline: auto"><link data-trunk rel="inline" href="assets/figures/eq3.svg"></div>
@@ -120,7 +120,7 @@ date: 2026
             We find that the mathematical model of a circle that best fits our data has a center of (0.0050 AU, &minus;0.0075 AU) with a radius more closely resembling 0.9965 AU.
           </p>
 
-          <figure class="plate" id="fig-6" data-reveal>
+          <figure class="plate" id="fig-6">
             <!-- Built by tools/figures/figure.py; edit labels there, not here. -->
             <div class="plate-art"><link data-trunk rel="inline" href="assets/figures/fig6.svg"></div>
             <figcaption><span class="plate-num">fig. 6</span> The fitted orbit: a circle, but centred away from the Sun.</figcaption>

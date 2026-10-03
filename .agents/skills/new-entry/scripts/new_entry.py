@@ -51,7 +51,7 @@ def kind_of(marker):
 def placeholder(kind, n, marker):
     mark = "equation goes here" if kind == "eq" else "visual goes here"
     cls = "plate plate--math" if kind == "eq" else "plate"
-    return (f'{P}<figure class="{cls}" id="{kind}-{n}" data-reveal>\n'
+    return (f'{P}<figure class="{cls}" id="{kind}-{n}">\n'
             f'{P}  <div class="plate-frame"><span class="plate-mark">{mark}</span></div>\n'
             f'{P}  <figcaption><span class="plate-num">{kind}. {n}</span> TODO: {html.escape(marker)}</figcaption>\n'
             f'{P}</figure>')
