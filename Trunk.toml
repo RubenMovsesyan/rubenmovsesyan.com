@@ -11,9 +11,8 @@ port = 8080
 open = false
 
 # Watch only what the build actually reads. Anything else in the tree -- the
-# font pipeline in tools/ and its __pycache__, the 65MB source photographs in
-# assets/img -- would otherwise trigger a rebuild, and trunk tells every open
-# page to reload on each one.
+# font pipeline in tools/ and its __pycache__, say -- would otherwise trigger
+# a rebuild, and trunk tells every open page to reload on each one.
 [watch]
 watch = [
   "layout.html",
@@ -28,8 +27,7 @@ watch = [
   "Cargo.lock",
 ]
 # Only directories that always exist: trunk refuses to start if an ignored
-# path is missing. assets/img and assets/tests (the DNGs, left out of the
-# checkout) are simply never watched.
+# path is missing.
 ignore = ["dist", "target", "tools", "scripts"]
 
 [[hooks]]

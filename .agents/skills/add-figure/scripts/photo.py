@@ -7,7 +7,8 @@
 A sheet often holds several drawings (earlier figures, an upside-down
 equation at the bottom), so tracing needs a --region. `find` groups the ink
 into separate drawings and prints each one's box in photo pixels, ready to
-pass to `figure.py trace --region`. Photos are named as in assets/img
+pass to `figure.py trace --region`. Photos are named as in the main repo's
+website-sources/img
 (IMG_5288, IMG_5288.DNG) or given as a path.
 
 Run with tools/figures/.venv/bin/python (numpy, scipy, Pillow).
@@ -25,7 +26,9 @@ WEBSITE = pathlib.Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(WEBSITE / "tools" / "handwriting"))
 from segment import despeckle, load_ink  # noqa: E402
 
-SEARCH = [WEBSITE / "assets" / "img", WEBSITE / "assets" / "tests"]
+# The photos live in the main repo, beside this one (the site is its submodule).
+SOURCES = WEBSITE.parent / "website-sources"
+SEARCH = [SOURCES / "img", SOURCES / "tests"]
 
 
 def locate(name):
@@ -37,9 +40,10 @@ def locate(name):
         if (d / stem).exists():
             return d / stem
     raise SystemExit(
-        f"{name}: not in the checkout. The photos live only on the server; fetch them with\n"
-        f"  git sparse-checkout set --no-cone '/*'\n"
-        f"and hide them again afterwards (see CLAUDE.md)."
+        f"{name}: not in {SOURCES}. The photos are committed in the main repo but left\n"
+        f"out of its checkout; fetch them with\n"
+        f"  git -C {WEBSITE.parent} sparse-checkout set --no-cone '/*'\n"
+        f"and hide them again afterwards (see the main repo's CLAUDE.md)."
     )
 
 

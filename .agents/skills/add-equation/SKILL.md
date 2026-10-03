@@ -17,7 +17,7 @@ the add-figure skill for the photo and tracing steps, with these differences.
 
 ```sh
 $PY .agents/skills/add-figure/scripts/photo.py find IMG_5287
-$PY tools/figures/figure.py trace assets/img/IMG_5287.DNG --name eq3 --region X0,Y0,X1,Y1 --join 0
+$PY tools/figures/figure.py trace ../website-sources/img/IMG_5287.DNG --name eq3 --region X0,Y0,X1,Y1 --join 0
 ```
 
 - **Always `--join 0`:** handwriting is many separate pieces of ink, and the

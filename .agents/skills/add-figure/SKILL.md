@@ -2,7 +2,7 @@
 name: add-figure
 description: >
   Turn a hand-drawn figure photographed in Ruben's notebook (a DNG in
-  assets/img) into a traced SVG figure on a blog page: find the drawing on the
+  ../website-sources/img) into a traced SVG figure on a blog page: find the drawing on the
   sheet, trace it, optionally label it, put it in its <figure> slot, and check
   it. Use when asked to "extract", "trace", "add" or "put in" a figure or
   drawing from an IMG_xxxx photo, to replace a "visual goes here" placeholder,
@@ -22,16 +22,20 @@ SK=.agents/skills/add-figure/scripts
 
 ## 1. Get the photo
 
-Photos are committed but left out of this checkout (see the DNG note in the
-root CLAUDE.md). If `assets/img/IMG_xxxx.DNG` isn't there:
+The site is a submodule of Ruben's Astronomy repo, and the notebook photos
+are not in it: they live beside it, in the main repo's `website-sources/img/`
+(`../website-sources/img/` from here), committed there but left out of that
+checkout (see the DNG note in the main repo's CLAUDE.md). If a photo isn't
+there, fetch them in the main repo:
 
 ```sh
-git sparse-checkout set --no-cone '/*'                        # git fetches them
+git -C .. sparse-checkout set --no-cone '/*'                       # git fetches them
 # ... trace ...
-git sparse-checkout set --no-cone '/*' '!*.DNG' '!*.dng'      # hide them again
+git -C .. sparse-checkout set --no-cone '/*' '!*.DNG' '!*.dng'     # hide them again
 ```
 
-A new photo Ruben just added is an untracked file and is already there.
+A new photo Ruben just added belongs in `../website-sources/img/`; commit it in
+the main repo, not here.
 
 ## 2. Find the drawing on the sheet
 
@@ -53,7 +57,7 @@ Name the figure after its number on the page (`fig3`, `eq2`). Names are only
 names; they don't change if figures are renumbered later.
 
 ```sh
-$PY tools/figures/figure.py trace assets/img/IMG_5288.DNG --name fig6 --region X0,Y0,X1,Y1
+$PY tools/figures/figure.py trace ../website-sources/img/IMG_5288.DNG --name fig6 --region X0,Y0,X1,Y1
 ```
 
 Then **look at `tools/figures/<name>/preview.png`** and compare it with the

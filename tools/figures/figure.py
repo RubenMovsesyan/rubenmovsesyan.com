@@ -21,6 +21,7 @@ and its `calt` alternates, which a path export would freeze.
 import argparse
 import html
 import json
+import os
 import pathlib
 import sys
 
@@ -138,7 +139,9 @@ def cmd_trace(args):
 
     photo = pathlib.Path(args.photo).resolve()
     meta = {
-        "photo": str(photo.relative_to(WEBSITE) if photo.is_relative_to(WEBSITE) else photo),
+        # Relative to the site, so ../website-sources/... for the main
+        # repo's photos rather than a path on one machine.
+        "photo": os.path.relpath(photo, WEBSITE),
         "crop": [int(x0), int(y0), int(x1), int(y1)],
         "width": w,
         "height": h,

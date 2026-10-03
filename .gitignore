@@ -6,3 +6,8 @@
 
 # Blender keeps the previous save next to each .blend
 *.blend1
+
+# Python tool environments and caches (tools/figures, tools/handwriting)
+.venv/
+__pycache__/
+*.pyc
