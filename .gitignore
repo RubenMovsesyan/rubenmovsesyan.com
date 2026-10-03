@@ -3,3 +3,6 @@
 **/*.rs.bk
 .DS_Store
 /tools/handwriting/build
+
+# Blender keeps the previous save next to each .blend
+*.blend1
