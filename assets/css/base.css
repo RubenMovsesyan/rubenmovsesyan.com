@@ -160,24 +160,42 @@ canvas, svg, img { display: block; }
    Hangs past the hero's bottom edge; the notebook (z-index 10) crops it,
    so it reads as standing behind the page. */
 
-.telescope {
+.telescope,
+.telescope-glow {
   position: absolute;
   /* The render crops the lower tripod itself (FRAME_ABOVE in
      telescope.rs), so the canvas only dips behind the torn edge. */
   bottom: -12px;
   right: 21%;
-  z-index: 5;
   width: clamp(8rem, 14vw, 13rem);
   /* The old drawing's proportions (240 x 285), so the spot is unchanged. */
   aspect-ratio: 240 / 285;
   height: auto;
   pointer-events: none;
-  filter: drop-shadow(0 6px 32px rgba(40, 80, 200, 0.28));
-  animation: settle 1400ms cubic-bezier(0.22, 1, 0.36, 1) 380ms backwards;
+  animation: rise 1400ms cubic-bezier(0.22, 1, 0.36, 1) 380ms backwards;
+}
+
+.telescope { z-index: 5; }
+
+/* The telescope's entrance: settle's motion and fade without its blur. The
+   canvas draws once and keeps that frame, and a filter on it while it draws
+   can leave Safari showing a low-resolution copy afterwards. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.8rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* The soft blue glow behind the telescope, as its own element: a CSS filter
+   on the canvas itself (drop-shadow, as before) makes Safari flatten the
+   canvas at low resolution, which blurs the telescope on phones. */
+.telescope-glow {
+  z-index: 4;
+  background: radial-gradient(ellipse 60% 55% at 50% 55%, rgba(40, 80, 200, 0.22), rgba(40, 80, 200, 0) 70%);
 }
 
 @media (max-width: 40rem) {
-  .telescope { right: 4%; width: 8rem; }
+  .telescope,
+  .telescope-glow { right: 4%; width: 8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
