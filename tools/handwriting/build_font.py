@@ -179,20 +179,20 @@ def main():
     charstrings, advances = {}, {}
     fb = FontBuilder(UPM, isTTF=False)
 
+    # The advance goes into the pen, which writes it into the charstring
+    # itself. Setting cs.width afterwards leaves every CFF width at 0: hmtx
+    # still has the right one, which FreeType and CoreText use, but Windows
+    # (DirectWrite) takes the CFF width and draws each word as one heap.
     for name, mask in masks.items():
-        pen = T2CharStringPen(None, None)
-        draw(pen, trace(mask), SIDEBEARING, baselines[name], scale)
         width = int(round(mask.shape[1] * scale)) + 2 * SIDEBEARING
-        cs = pen.getCharString()
-        cs.width = width
-        charstrings[name] = cs
+        pen = T2CharStringPen(width, None)
+        draw(pen, trace(mask), SIDEBEARING, baselines[name], scale)
+        charstrings[name] = pen.getCharString()
         advances[name] = width
         glyph_order.append(name)
 
     for name, w in ((".notdef", SPACE_WIDTH), ("space", SPACE_WIDTH)):
-        cs = T2CharStringPen(None, None).getCharString()
-        cs.width = w
-        charstrings[name] = cs
+        charstrings[name] = T2CharStringPen(w, None).getCharString()
         advances[name] = w
 
     # The CFF name is a PostScript name: no spaces, or OTS rejects the font
@@ -204,9 +204,13 @@ def main():
     fb.setupCFF(ps_name, {"FullName": args.name}, charstrings, {})
     fb.setupHorizontalMetrics({n: (advances[n], 0) for n in glyph_order})
     fb.setupHorizontalHeader(ascent=800, descent=-300)
-    fb.setupNameTable({"familyName": args.name, "styleName": "Regular", "psName": ps_name})
+    # Full and unique names, version, and the REGULAR bit: Windows expects them.
+    fb.setupNameTable({"familyName": args.name, "styleName": "Regular",
+                       "fullName": args.name, "uniqueFontIdentifier": ps_name,
+                       "version": "Version 1.000", "psName": ps_name})
     fb.setupOS2(sTypoAscender=800, sTypoDescender=-300, usWinAscent=950,
-                usWinDescent=400, sxHeight=410, sCapHeight=CAP_HEIGHT)
+                usWinDescent=400, sxHeight=410, sCapHeight=CAP_HEIGHT,
+                fsSelection=0x40)
     fb.setupPost()
 
     fea = out / "features.fea"
